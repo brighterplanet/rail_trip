@@ -33,13 +33,7 @@ begin
     gem.add_development_dependency 'rspec', '= 2.0.0.beta.17'
     gem.add_development_dependency 'sniff', '=0.0.14' unless ENV['LOCAL_SNIFF']
 gem.add_dependency 'characterizable', '>=0.0.13'
-    gem.add_dependency 'cohort_scope', '~> 0.0'
-    gem.add_dependency 'data_miner', '= 0.5.2' unless ENV['LOCAL_DATA_MINER']
-    gem.add_dependency 'earth', '>= 0.0.7'
-    gem.add_dependency 'falls_back_on', '= 0.0.2'
-    gem.add_dependency 'fast_timestamp', '= 0.0.4'
-    gem.add_dependency 'leap', '>= 0.4.1' unless ENV['LOCAL_LEAP']
-    gem.add_dependency 'summary_judgement', '= 1.3.8'
+    gem.add_dependency 'emitter', '>= 0.0.l'
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError
