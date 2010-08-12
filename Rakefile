@@ -32,7 +32,6 @@ begin
     gem.add_development_dependency 'rdoc'
     gem.add_development_dependency 'rspec', '= 2.0.0.beta.17'
     gem.add_development_dependency 'sniff', '=0.0.14' unless ENV['LOCAL_SNIFF']
-gem.add_dependency 'characterizable', '>=0.0.13'
     gem.add_dependency 'emitter', '>= 0.0.l'
   end
   Jeweler::GemcutterTasks.new

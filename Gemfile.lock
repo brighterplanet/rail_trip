@@ -1,8 +1,7 @@
 PATH
   remote: .
   specs:
-    rail_trip (0.0.7)
-      characterizable (>= 0.0.13)
+    rail_trip (0.0.8)
       emitter (>= 0.0.l)
 
 GEM
@@ -176,7 +175,6 @@ PLATFORMS
 DEPENDENCIES
   activerecord (= 3.0.0.beta4)
   bundler (>= 1.0.0.beta.2)
-  characterizable (>= 0.0.13)
   cucumber (= 0.8.3)
   emitter (>= 0.0.l)
   jeweler (= 1.4.0)
