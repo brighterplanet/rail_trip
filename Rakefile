@@ -31,8 +31,8 @@ begin
     gem.add_development_dependency 'rake'
     gem.add_development_dependency 'rdoc'
     gem.add_development_dependency 'rspec', '= 2.0.0.beta.17'
-    gem.add_development_dependency 'sniff', '=0.0.14' unless ENV['LOCAL_SNIFF']
-    gem.add_dependency 'emitter', '>= 0.0.l'
+    gem.add_development_dependency 'sniff', '~>0.1.10' unless ENV['LOCAL_SNIFF']
+    gem.add_dependency 'emitter', '~> 0.0.9'
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError
@@ -83,4 +83,10 @@ begin
   end
 rescue LoadError
   puts "Cucumber not available, `gem install cucumber`"
+end
+
+begin
+  require 'emitter/tasks'
+rescue LoadError
+  puts 'Skipping emitter tasks'
 end
