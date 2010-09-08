@@ -31,9 +31,7 @@ module BrighterPlanet
           # This `process` block indicates that RailTrip's associated classes
           # should populate themselves according to their own DataMiner
           # instructions.
-          process "pull dependencies" do
-            run_data_miner_on_belongs_to_associations
-          end
+          process :run_data_miner_on_belongs_to_associations
         end
       end
     end
