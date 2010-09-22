@@ -1,7 +1,5 @@
 # Rail trip's persistence schema is defined using a domain-specific language
 # provided by [Data Miner](http://github.com/seamusabshere/data_miner).
-require 'data_miner'
-
 module BrighterPlanet
   module RailTrip
 

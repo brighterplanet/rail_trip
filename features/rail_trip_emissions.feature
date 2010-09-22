@@ -5,7 +5,7 @@ Feature: Rail Trip Emissions Calculations
     Given a rail trip has "rail_class.name" of "<rail_class>"
     And it has "distance_estimate" of "<distance>"
     When emissions are calculated
-    Then the emission value should be within 0.1 kgs of <emission>
+    Then the emission value should be within "0.1" kgs of "<emission>"
     Examples:
       | rail_class    | distance | emission |
       | commuter rail |       50 |     13.9 |

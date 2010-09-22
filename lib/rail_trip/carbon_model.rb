@@ -1,7 +1,5 @@
 # Rail trip's carbon model is implemented using a domain-specific language
 # provided by [Leap](http://github.com/rossmeissl/leap).
-require 'leap'
-
 module BrighterPlanet
   module RailTrip
 
@@ -24,7 +22,6 @@ module BrighterPlanet
     module CarbonModel
       def self.included(base)
         ##### The carbon model
-        base.extend ::Leap::Subject
         
         # This `decide` block encapsulates the carbon model. The carbon model is
         # executed with a set of "characteristics" as input. These characteristics are
@@ -41,7 +38,7 @@ module BrighterPlanet
             # to obtain a per-passenger emission share.  
             quorum 'from fuel and passengers', :needs => [:diesel_consumed, :electricity_used, :passengers] do |characteristics|
               #((       litres diesel         ) * (  kilograms CO2 / litre diesel   ) + (           kwH                  ) * (     kilograms CO2 / kWh               ))
-              (characteristics[:diesel_consumed] * RailTrip.rail_trip_model.research(:diesel_emission_factor) + characteristics[:electricity_used] * RailTrip.rail_trip_model.research(:electricity_emission_factor)) / characteristics[:passengers]
+              (characteristics[:diesel_consumed] * base.research(:diesel_emission_factor) + characteristics[:electricity_used] * RailTrip.rail_trip_model.research(:electricity_emission_factor)) / characteristics[:passengers]
             end
           end
           

@@ -1,7 +1,5 @@
 # Rail trip's characterization is implemented using a domain-specific language
 # provided by [Characterizable](http://github.com/seamusabshere/characterizable).
-require 'characterizable'
-
 module BrighterPlanet
   module RailTrip
 
@@ -18,7 +16,6 @@ module BrighterPlanet
     module Characterization
       def self.included(base)
         ##### The characterization
-        base.send :include, Characterizable
 
         # This `characterize` block encapsulates the characterization. Typically
         # emitter models will be backed by ActiveRecord, which will provide
@@ -31,7 +28,6 @@ module BrighterPlanet
         end
         
         # Additional characteristics are gleaned from the carbon model.
-        base.add_implicit_characteristics
       end
     end
   end
