@@ -1,3 +1,7 @@
+# Copyright © 2010 Brighter Planet.
+# See LICENSE for details.
+# Contact Brighter Planet for dual-license arrangements.
+
 # Rail trip's carbon model is implemented using a domain-specific language
 # provided by [Leap](http://github.com/rossmeissl/leap).
 module BrighterPlanet
