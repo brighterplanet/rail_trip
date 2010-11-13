@@ -66,3 +66,14 @@ Feature: Rail Trip Committee Calculations
     And a characteristic "diesel_intensity" of "2"
     When the "diesel_consumed" committee is calculated
     Then the conclusion of the committee should be "200.0"
+
+  Scenario: Electricity emission factor from default
+    Given a rail trip emitter
+    When the "electricity_emission_factor" committee is calculated
+    Then the conclusion of the committee should be "0.63158"
+
+  Scenario: Diesel emission factor from default
+    Given a rail trip emitter
+    When the "diesel_emission_factor" committee is calculated
+    Then the conclusion of the committee should be "2.0"
+

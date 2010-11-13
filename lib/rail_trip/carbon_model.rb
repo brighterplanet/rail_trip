@@ -31,20 +31,48 @@ module BrighterPlanet
             # **Complies:** GHG Protocol, ISO-140641, Climate Registry Protocol
             #
             # - Checks whether the trip occurred during the `timeframe`
-            # - Looks up an emission factor for diesel (*kg CO<sub>2</sub>e / l diesel*)
-            # - Multiplies `diesel use` (*l diesel*) by the diesel emission factor (*kg CO<sub>2</sub>e / l diesel*) to give diesel emissions (*kg CO<sub>2</sub>e*)
-            # - Looks up an emission factor for electricity (*kg CO<sub>2</sub>e / kWh electricity*)
-            # - Multiplies `electricity use` (*kWh*) by the electricity emission factor (*kg CO<sub>2</sub>e / kWh electricity*) to give electricity emissions (*kg CO<sub>2</sub>e*)
+            # - Multiplies `diesel use` (*l diesel*) by the `diesel emission factor` (*kg CO<sub>2</sub>e / l diesel*) to give diesel emissions (*kg CO<sub>2</sub>e*)
+            # - Multiplies `electricity use` (*kWh*) by the `electricity emission factor` (*kg CO<sub>2</sub>e / kWh electricity*) to give electricity emissions (*kg CO<sub>2</sub>e*)
             # - Adds diesel and electricity emissions to give total emissions (*kg CO<sub>2</sub>e*)
             # - Divides by passengers to give emissions per passenger (*kg CO<sub>2</sub>e*)
             # - If the trip did not occur during the `timeframe`, `emission` is zero
-            quorum 'from fuel and passengers', :needs => [:diesel_consumed, :electricity_consumed, :passengers, :date] do |characteristics, timeframe|
+            quorum 'from date, fuel, emission factors, and passengers', :needs => [:diesel_consumed, :diesel_emission_factor, :electricity_consumed, :electricity_emission_factor, :passengers, :date] do |characteristics, timeframe|
               date = characteristics[:date].is_a?(Date) ? characteristics[:date] : Date.parse(characteristics[:date].to_s)
               if timeframe.include? date
-                (characteristics[:diesel_consumed] * base.research(:diesel_emission_factor) + characteristics[:electricity_consumed] * RailTrip.rail_trip_model.research(:electricity_emission_factor)) / characteristics[:passengers]
+                (characteristics[:diesel_consumed] * characteristics[:diesel_emission_factor] + characteristics[:electricity_consumed] * characteristics[:electricity_emission_factor]) / characteristics[:passengers]
               else
                 0
               end
+            end
+          end
+          
+          ### Diesel emission factor calculation
+          # Returns the `diesel emission factor` (*kg CO<sub>2</sub>e / l*).
+          committee :diesel_emission_factor do
+            #### Default diesel emission factor
+            # **Complies:** GHG Protocol, ISO 14064-1, Climate Registry Protocol
+            #
+            # Looks up [Distillate Fuel Oil 2](http://data.brighterplanet.com/fuel_types)'s `emission factor` (*kg CO<sub>2</sub>e / l*).
+            quorum 'default' do
+              diesel = FuelType.find_by_name "Distillate Fuel Oil 2"
+              diesel.emission_factor
+            end
+          end
+          
+          ### Electricity emission factor calculation
+          # Returns the `electricity emission factor` (*kg CO<sub>2</sub>e / kWh*).
+          committee :electricity_emission_factor do
+            #### Default electricity emission factor
+            # **Complies:** GHG Protocol, ISO 14064-1, Climate Registry Protocol
+            #
+            # - Looks up the [U.S. Average](http://data.brighterplanet.com/egrid_subregions) `electricity emission factor` (*kg CO<sub>2</sub>e / l*)
+            # - Looks up the [U.S. Average](http://data.brighterplanet.com/egrid_regions) grid region `loss factor`
+            # - Divides the `electricity emission factor` by (1 - `loss factor`) to account for transmission and distribution losses
+            quorum 'default' do
+              subregion = EgridSubregion.find_by_abbreviation "US"
+              region = subregion.egrid_region
+              emission_factor = subregion.electricity_emission_factor / (1 - region.loss_factor)
+              emission_factor
             end
           end
           
