@@ -1,5 +1,2 @@
-"name","distance","distance_units","passengers","speed","speed_units","duration","duration_units","electricity_intensity","electricity_intensity_units","diesel_intensity","diesel_intensity_units","description","updated_at","created_at"
-"commuter rail","36.9344","kilometres","33.62","50.8553","kilometres","43.57","NULL","12.2149","kilometres","0.682122","litres_per_kilometre","commuter train","2010-05-27 01:26:03","2010-05-25 16:14:52"
-"heavy rail","8.32031","kilometres","22.7","32.7501","kilometres","15.23","NULL","13.6151","kilometres","0","litres_per_kilometre","subway/metro","2010-05-27 01:26:03","2010-05-25 16:14:52"
-"intercity rail","347.667","kilometres","162.43","52.8509","kilometres","394.74","NULL","36.9827","kilometres","4.86894","litres_per_kilometre","amtrak","2010-05-27 01:26:03","2010-05-25 16:14:52"
-"light rail","7.00065","kilometres","23.94","24.7195","kilometres","16.99","NULL","19.5213","kilometres","0","litres_per_kilometre","trolley/tram","2010-05-27 01:26:03","2010-05-25 16:14:52"
+name,distance,distance_units,passengers,speed,speed_units,electricity_intensity,electricity_intensity_units,diesel_intensity,diesel_intensity_units,
+commuter rail,36.9344,kilometres,33.62,50.8553,kilometres_per_hour,12.2149,kilowatt_hours_per_kilometre,0.682122,litres_per_kilometre

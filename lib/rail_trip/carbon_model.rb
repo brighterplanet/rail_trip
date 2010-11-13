@@ -2,148 +2,214 @@
 # See LICENSE for details.
 # Contact Brighter Planet for dual-license arrangements.
 
-# Rail trip's carbon model is implemented using a domain-specific language
-# provided by [Leap](http://github.com/rossmeissl/leap).
+## Rail trip carbon model
+# This model is used by [Brighter Planet](http://brighterplanet.com)'s carbon emission [web service](http://carbon.brighterplanet.com) to estimate the **greenhouse gas emissions of passenger rail travel**.
+#
+##### Calculations
+# The final estimate is the result of the **calculations** detailed below. These calculations are performed in reverse order, starting with the last calculation listed and finishing with the emission calculation. Each calculation is named according to the `value` it returns.
+#
+##### Timeframe and date
+# The model estimates the emissions that occur during a particular `timeframe`. To do this it needs to know the trip's `date`. For example, if the `timeframe` is January 2010, a trip that occurred on January 11, 2010 will have emissions but a trip that occurred on Febraury 1, 2010 will not.
+#
+##### Methods
+# To accomodate varying client input, each calculation may have one or more **methods**. These are listed under each calculation in order from most to least preferred. Each method is named according to the `values` it requires ('default' methods do not require any values). Methods are ignored if any of the values they require are unvailable. Calculations are ignored if all of their methods are unavailable.
+#
+##### Standard compliance
+# Each method lists any established calculation standards with which it **complies**. When compliance with a standard is requested, all methods that do not comply with that standard are ignored. This means that any values a particular method requires will have been calculated using a compliant method or will be unavailable.
+#
+##### Collaboration
+# Contributions to this carbon model are actively encouraged and warmly welcomed. This library includes a comprehensive test suite to ensure that your changes do not cause regressions. All changes should include test coverage for new functionality. Please see [sniff](http://github.com/brighterplanet/sniff#readme), our emitter testing framework, for more information.
 module BrighterPlanet
   module RailTrip
-
-    #### Rail trip: carbon model
-    # This module is used by [Brighter Planet](http://brighterplanet.com)'s
-    # [emission estimate service](http://carbon.brighterplanet.com) to provide
-    # greenhouse gas emission estimates for rail trips.
-    #
-    # For more information see:
-    #
-    #   * [API documentation](http://carbon.brighterplanet.com/rail_trips/options)
-    #   * [Source code](http://github.com/brighterplanet/rail_trip)
-    #
-    ##### Collaboration
-    # Contributions to this carbon model are actively encouraged and warmly welcomed.
-    # This library includes a comprehensive test suite to ensure that your changes
-    # do not cause regressions. All changes shold include test coverage for new
-    # functionality. Please see [sniff](http://github.com/brighterplanet/sniff#readme),
-    # our emitter testing framework, for more information.
     module CarbonModel
       def self.included(base)
-        ##### The carbon model
-        
-        # This `decide` block encapsulates the carbon model. The carbon model is
-        # executed with a set of "characteristics" as input. These characteristics are
-        # parsed from input received by the client request according to the
-        # [characterization](characterization.html).
         base.decide :emission, :with => :characteristics do
-
-          # The emission committee returns a carbon emission estimate in kilograms CO2e.
-          committee :emission do # returns kg CO2
-
-            # This calculation technique transforms amounts of diesel and electricity
-            # consumed during the rail trip---via their current emission factors---to
-            # an overall emission value. This value is divided by the passenger count
-            # to obtain a per-passenger emission share.  
-            quorum 'from fuel and passengers', :needs => [:diesel_consumed, :electricity_used, :passengers] do |characteristics|
-              #((       litres diesel         ) * (  kilograms CO2 / litre diesel   ) + (           kwH                  ) * (     kilograms CO2 / kWh               ))
-              (characteristics[:diesel_consumed] * base.research(:diesel_emission_factor) + characteristics[:electricity_used] * RailTrip.rail_trip_model.research(:electricity_emission_factor)) / characteristics[:passengers]
+          ### Emission calculation
+          # Returns the `emission` estimate (*kg CO<sub>2</sub>e*).
+          committee :emission do
+            #### From fuel and passengers
+            # **Complies:** GHG Protocol, ISO-140641, Climate Registry Protocol
+            #
+            # - Checks whether the trip occurred during the `timeframe`
+            # - Looks up an emission factor for diesel (*kg CO<sub>2</sub>e / l diesel*)
+            # - Multiplies `diesel use` (*l diesel*) by the diesel emission factor (*kg CO<sub>2</sub>e / l diesel*) to give diesel emissions (*kg CO<sub>2</sub>e*)
+            # - Looks up an emission factor for electricity (*kg CO<sub>2</sub>e / kWh electricity*)
+            # - Multiplies `electricity use` (*kWh*) by the electricity emission factor (*kg CO<sub>2</sub>e / kWh electricity*) to give electricity emissions (*kg CO<sub>2</sub>e*)
+            # - Adds diesel and electricity emissions to give total emissions (*kg CO<sub>2</sub>e*)
+            # - Divides by passengers to give emissions per passenger (*kg CO<sub>2</sub>e*)
+            # - If the trip did not occur during the `timeframe`, `emission` is zero
+            quorum 'from fuel and passengers', :needs => [:diesel_consumed, :electricity_consumed, :passengers, :date] do |characteristics, timeframe|
+              date = characteristics[:date].is_a?(Date) ? characteristics[:date] : Date.parse(characteristics[:date].to_s)
+              if timeframe.include? date
+                (characteristics[:diesel_consumed] * base.research(:diesel_emission_factor) + characteristics[:electricity_consumed] * RailTrip.rail_trip_model.research(:electricity_emission_factor)) / characteristics[:passengers]
+              else
+                0
+              end
             end
           end
           
-          # Generally the client will not know the exact amount of diesel consumed
-          # during the rail trip, so it must be calculated.
-          committee :diesel_consumed do # returns litres diesel
-            
-            # This technique uses trip distance and fuel efficiency to determine diesel
-            # consumption.
+          ### Diesel consumed calculation
+          # Returns the `diesel use` (*l*).
+          committee :diesel_consumed do
+            #### From distance and diesel intensity
+            # **Complies:** GHG Protocol, ISO-140641, Climate Registry Protocol
+            #
+            # Multiplies `distance` (*km*) by `diesel intensity` (*l / km*) to give *l*.
             quorum 'from distance and diesel intensity', :needs => [:distance, :diesel_intensity] do |characteristics|
-              #(          kilometres        ) * (     litres diesel / kilometre      )
               characteristics[:distance] * characteristics[:diesel_intensity]
             end
           end
           
-          # Similarly, electricity consumption will typically be computed here.
-          committee :electricity_used do # returns kWh
-
-            # As with diesel consumption, we calculate electricity use by multiplying
-            # distance by "electric intensity"--- an analogue of fuel efficiency.
+          ### Electricity consumed calculation
+          # Returns the `electricity use` (*kWh*).
+          committee :electricity_consumed do
+            #### From distance and electricity intensity
+            # **Complies:** GHG Protocol, ISO-140641, Climate Registry Protocol
+            #
+            # Multiplies `distance` (*km*) by `electricity intensity` (*kWh / km*) to give *kWh*.
             quorum 'from distance and electricity intensity', :needs => [:distance, :electricity_intensity] do |characteristics|
-              #(       kilometres           ) * (         kWh / kilometre                  )
               characteristics[:distance] * characteristics[:electricity_intensity]
             end
           end
           
-          # The distance of the rail trip is necessary to perform each of the above
-          # calculations and can be calculated using several methods.
-          committee :distance do # returns kilometres
-            
-            # The primary distance-calculation method is directly accepting an estimate from
-            # the client.
+          ### Distance calculation
+          # Returns the `distance` traveled (*km*).
+          committee :distance do
+            #### Distance from distance estimate
+            # **Complies:** All
+            #
+            # Uses the `distance_estimate` (*km*).
             quorum 'from distance estimate', :needs => :distance_estimate do |characteristics|
               characteristics[:distance_estimate]
             end
             
-            # Alternatively we can calculate distance by combining an estimate of trip
-            # duration with the train's average speed.
-            quorum 'from duration', :needs => [:duration, :speed] do |characteristics|
-              #(       hours           ) * (        kph          )
+            #### Distance from duration and speed
+            # **Complies:** GHG Protocol, ISO-140641, Climate Registry Protocol
+            #
+            # Multiplies the `duration` (*hours*) by the `speed` (*km / hour*) to give *km*.
+            quorum 'from duration and speed', :needs => [:duration, :speed] do |characteristics|
               characteristics[:duration] * characteristics[:speed]
             end
             
-            # Finally, we can assume the trip covered an average distance, scoped by
-            # its rail class (subway vs. intercity, for example).
+            #### Distance from rail class
+            # **Complies:** GHG Protocol, ISO-140641, Climate Registry Protocol
+            #
+            # Looks up the [rail class](http://data.brighterplanet.com/rail_classes) `distance`.
             quorum 'from rail class', :needs => :rail_class do |characteristics|
               characteristics[:rail_class].distance
             end
           end
           
-          # Diesel intensity is analogous to fuel efficiency (mpg), but are expressed
-          # in units of fuel per unit of distance.
-          committee :diesel_intensity do # returns litres diesel / vehicle kilometre
-            
-            # Brighter Planet has pre-calculated intensities for popular rail classes.
+          ### Distance estimate calculation
+          # Returns the trip's `distance estimate` (*km*).
+            #### Distance estimate from client input
+            # **Complies:** All
+            #
+            # Uses the client-input `distance estimate` (*km*).
+          
+          ### Duration calculation
+          # Returns the trip's `duration` (*hours*).
+            #### Duration from client input
+            # **Complies:** All
+            #
+            # Uses the client-input `duration` (*hours*).
+          
+          ### Diesel intensity calculation
+          # Returns the `diesel intensity` (*l / km*).
+          committee :diesel_intensity do
+            #### Diesel intensity from rail class
+            # **Complies:** GHG Protocol, ISO-140641, Climate Registry Protocol
+            #
+            # Looks up the [rail class](http://data.brighterplanet.com/rail_classes) `diesel intensity`.
             quorum 'from rail class', :needs => :rail_class do |characteristics|
               characteristics[:rail_class].diesel_intensity
             end
           end
           
-          # Electricity intensity describes the amount of electric power consumed per
-          # unit of train travel distance.
-          committee :electricity_intensity do # returns kWh / vehicle kilometre
-            
-            # Again, intensities have been pre-calculated for popular rail classes.
+          ### Electricity intensity calculation
+          # Returns the `electricity intensity` (*kWh / km*).
+          committee :electricity_intensity do
+            #### Electricity intensity from rail class
+            # **Complies:** GHG Protocol, ISO-140641, Climate Registry Protocol
+            #
+            # Looks up the [rail class](http://data.brighterplanet.com/rail_classes) `electricity intensity`.
             quorum 'from rail class', :needs => :rail_class do |characteristics|
               characteristics[:rail_class].electricity_intensity
             end
           end
           
-          # Speed is only necessary when used in combination with trip (temporal)
-          # duration to determine distance.
-          committee :speed do # returns kph
-            
-            # Rail classes provide average speed.
-            quorum 'from rail class', :needs => :rail_class do |characteristics|
+          ### Speed calculation
+          # Returns the average `speed` (*km / hour*).
+          committee :speed do
+            #### Speed from rail class
+            # **Complies:** GHG Protocol, ISO-140641, Climate Registry Protocol
+            #
+            # Looks up the [rail class](http://data.brighterplanet.com/rail_classes) `speed`.
+            quorum 'from rail class', :needs => :rail_class, :complies => [:ghg_protocol, :iso, :tcr] do |characteristics|
               characteristics[:rail_class].speed
             end
           end
           
-          # Each passenger is responsible for a share of the train trip's total
-          # footprint.
+          ### Passengers calculation
+          # Returns the total number of `passengers`.
           committee :passengers do
-            
-            # A passenger count can be gleaned from popular rail classes.
-            quorum 'from rail class', :needs => :rail_class do |characteristics|
+            #### Passengers from rail class
+            # **Complies:** GHG Protocol, ISO-140641, Climate Registry Protocol
+            #
+            # Looks up the [rail class](http://data.brighterplanet.com/rail_classes) `passengers`.
+            quorum 'from rail class', :needs => :rail_class, :complies => [:ghg_protocol, :iso, :tcr]  do |characteristics|
               characteristics[:rail_class].passengers
             end
           end
           
-          # The vehicle used for a rail trip can be meaningfully assigned to one
-          # of a list of categories called classes, including subways, intercity
-          # rail, and commuter rail, for example.
+          ### Rail class calculation
+          # Returns the [rail class](http://data.brighterplanet.com/rail_classes).
+          # This is the type of rail the trip used.
           committee :rail_class do
+            #### Rail class from client input
+            # **Complies:** All
+            #
+            # Uses the client-input [rail class](http://data.brighterplanet.com/rail_classes).
             
-            # If the client does not provide a rail class, we use an artificial
-            # rail class, constructed using a weighted average approach.
-            quorum 'default' do
+            #### Default rail class
+            # **Complies:** GHG Protocol, ISO 14064-1, Climate Registry Protocol
+            #
+            # Uses U.S. averages.
+            quorum 'default', :complies => [:ghg_protocol, :iso, :tcr] do
               RailClass.fallback
             end
           end
+          
+          ### Date calculation
+          # Returns the `date` on which the trip occurred.
+          committee :date do
+            #### Date from client input
+            # **Complies:** All
+            #
+            # Uses the client-input `date`.
+            
+            #### Date from timeframe
+            # **Complies:** GHG Protocol, ISO-14064-1, Climate Registry Protocol
+            #
+            # Assumes the trip occurred on the first day of the `timeframe`.
+            quorum 'from timeframe', :complies => [:ghg_protocol, :iso, :tcr] do |characteristics, timeframe|
+              timeframe.from
+            end
+          end
+          
+          ### Timeframe calculation
+          # Returns the `timeframe`.
+          # This is the period during which to calculate emissions.
+            
+            #### Timeframe from client input
+            # **Complies:** All
+            #
+            # Uses the client-input `timeframe`.
+            
+            #### Default timeframe
+            # **Complies:** All
+            #
+            # Uses the current calendar year.
         end
       end
     end

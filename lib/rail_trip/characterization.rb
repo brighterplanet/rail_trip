@@ -25,6 +25,7 @@ module BrighterPlanet
           has :rail_class
           has :duration, :measures => :time
           has :distance_estimate, :trumps => :duration, :measures => :length
+          has :date
         end
         
         # Additional characteristics are gleaned from the carbon model.

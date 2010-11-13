@@ -19,11 +19,10 @@ module BrighterPlanet
         base.data_miner do
           # This `schema` block encapsulates the persistence schema.
           schema do
-            string  'name'
-            date    'date'
+            string  'rail_class_name'
             float   'duration'
             float   'distance_estimate'
-            string  'rail_class_id'
+            date    'date'
           end
 
           # This `process` block indicates that RailTrip's associated classes

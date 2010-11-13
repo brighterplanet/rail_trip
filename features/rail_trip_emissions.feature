@@ -1,12 +1,33 @@
 Feature: Rail Trip Emissions Calculations
   The rail trip model should generate correct emission calculations
 
-  Scenario Outline: Standard Calculations for rail trip
-    Given a rail trip has "rail_class.name" of "<rail_class>"
-    And it has "distance_estimate" of "<distance>"
+  Scenario: Calculations for rail trip with nothing
+    Given a rail trip has nothing
     When emissions are calculated
-    Then the emission value should be within "0.1" kgs of "<emission>"
+    Then the emission value should be within "0.01" kgs of "5.03"
+
+  Scenario Outline: Calculations for rail trip from date and timeframe
+    Given a rail trip has "date" of "<date>"
+    And it has "timeframe" of "<timeframe>"
+    When emissions are calculated
+    Then the emission value should be within "0.01" kgs of "<emission>"
     Examples:
-      | rail_class    | distance | emission |
-      | commuter rail |       50 |     13.9 |
-      |    light rail |       12 |      6.0 |
+      | date       | timeframe             | emission |
+      | 2010-07-12 | 2010-07-01/2010-07-10 | 0.0      |
+      | 2010-07-12 | 2010-07-01/2010-07-30 | 5.03     |
+      | 2010-07-12 | 2010-07-15/2010-07-30 | 0.0      |
+
+  Scenario: Calculations for rail trip from distance estimate
+    Given a rail trip has "distance_estimate" of "100"
+    When emissions are calculated
+    Then the emission value should be within "0.01" kgs of "36.49"
+
+  Scenario: Calculations for rail trip from duration
+    Given a rail trip has "duration" of "2"
+    When emissions are calculated
+    Then the emission value should be within "0.01" kgs of "29.41"
+
+  Scenario: Calculations for rail trip from rail class
+    Given a rail trip has "rail_class.name" of "commuter rail"
+    When emissions are calculated
+    Then the emission value should be within "0.01" kgs of "10.31"
