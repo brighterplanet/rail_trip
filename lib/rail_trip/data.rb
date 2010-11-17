@@ -21,7 +21,7 @@ module BrighterPlanet
           schema do
             string  'rail_class_name'
             float   'duration'
-            float   'distance_estimate'
+            float   'distance'
             date    'date'
           end
 

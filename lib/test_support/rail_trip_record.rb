@@ -5,5 +5,5 @@ class RailTripRecord < ActiveRecord::Base
   include BrighterPlanet::RailTrip
   belongs_to :rail_class
     
-  conversion_accessor :distance_estimate, :external => :miles, :internal => :kilometres
+  conversion_accessor :distance, :external => :miles, :internal => :kilometres
 end
