@@ -43,11 +43,15 @@ require_or_fail('jeweler', 'Jeweler (or a dependency) not available. Install it 
     gem.add_development_dependency 'rake'
     gem.add_development_dependency 'rdoc'
     gem.add_development_dependency 'rspec', '= 2.0.0.beta.17'
-    gem.add_development_dependency 'sniff', '~>0.2.0' unless ENV['LOCAL_SNIFF']
-    gem.add_dependency 'emitter', '~>0.1.7'
-    gem.add_dependency 'earth', '~0.2.6' unless ENV['LOCAL_EARTH']
+    gem.add_development_dependency 'sniff', '~>0.3.0' unless ENV['LOCAL_SNIFF']
+    gem.add_dependency 'emitter', '~>0.2.1' unless ENV['LOCAL_EMITTER']
   end
   Jeweler::GemcutterTasks.new
+end
+
+require_or_fail 'emitter', 'Emitter gem not found, emitter tasks unavailable' do
+  require 'emitter/tasks'
+  Emitter::Tasks.new.define('rail_trip')
 end
 
 require_or_fail('sniff', 'Sniff gem not found, sniff tasks unavailable') do
