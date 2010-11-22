@@ -59,7 +59,11 @@
 <p> Contributions to this carbon model are actively encouraged and warmly welcomed. This library includes a comprehensive test suite to ensure that your changes do not cause regressions. All changes should include test coverage for new functionality. Please see <a href="http://github.com/brighterplanet/sniff#readme">sniff</a>, our emitter testing framework, for more information.</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre></pre></div>
+        <div class='highlight'><pre><span class="k">module</span> <span class="nn">BrighterPlanet</span>
+  <span class="k">module</span> <span class="nn">RailTrip</span>
+    <span class="k">module</span> <span class="nn">CarbonModel</span>
+      <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">included</span><span class="p">(</span><span class="n">base</span><span class="p">)</span>
+        <span class="n">base</span><span class="o">.</span><span class="n">decide</span> <span class="ss">:emission</span><span class="p">,</span> <span class="ss">:with</span> <span class="o">=&gt;</span> <span class="ss">:characteristics</span> <span class="k">do</span></pre></div>
       </td>
     </tr>
     <tr id='section-3'>
@@ -72,7 +76,7 @@
 <p> Returns the <code>emission</code> estimate (<em>kg CO<sub>2</sub>e</em>).</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre></pre></div>
+        <div class='highlight'><pre>          <span class="n">committee</span> <span class="ss">:emission</span> <span class="k">do</span></pre></div>
       </td>
     </tr>
     <tr id='section-4'>
@@ -94,7 +98,16 @@
 </ul>
       </td>
       <td class=code>
-        <div class='highlight'><pre></pre></div>
+        <div class='highlight'><pre>            <span class="n">quorum</span> <span class="s1">&#39;from date, fuel, emission factors, and passengers&#39;</span><span class="p">,</span> <span class="ss">:needs</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="ss">:diesel_consumed</span><span class="p">,</span> <span class="ss">:diesel_emission_factor</span><span class="p">,</span> <span class="ss">:electricity_consumed</span><span class="p">,</span> <span class="ss">:electricity_emission_factor</span><span class="p">,</span> <span class="ss">:passengers</span><span class="p">,</span> <span class="ss">:date</span><span class="o">]</span> <span class="k">do</span> <span class="o">|</span><span class="n">characteristics</span><span class="p">,</span> <span class="n">timeframe</span><span class="o">|</span>
+              <span class="n">date</span> <span class="o">=</span> <span class="n">characteristics</span><span class="o">[</span><span class="ss">:date</span><span class="o">].</span><span class="n">is_a?</span><span class="p">(</span><span class="no">Date</span><span class="p">)</span> <span class="p">?</span> <span class="n">characteristics</span><span class="o">[</span><span class="ss">:date</span><span class="o">]</span> <span class="p">:</span> <span class="no">Date</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">characteristics</span><span class="o">[</span><span class="ss">:date</span><span class="o">].</span><span class="n">to_s</span><span class="p">)</span>
+              <span class="k">if</span> <span class="n">timeframe</span><span class="o">.</span><span class="n">include?</span> <span class="n">date</span>
+                <span class="p">(</span><span class="n">characteristics</span><span class="o">[</span><span class="ss">:diesel_consumed</span><span class="o">]</span> <span class="o">*</span> <span class="n">characteristics</span><span class="o">[</span><span class="ss">:diesel_emission_factor</span><span class="o">]</span> <span class="o">+</span> <span class="n">characteristics</span><span class="o">[</span><span class="ss">:electricity_consumed</span><span class="o">]</span> <span class="o">*</span> <span class="n">characteristics</span><span class="o">[</span><span class="ss">:electricity_emission_factor</span><span class="o">]</span><span class="p">)</span> <span class="o">/</span> <span class="n">characteristics</span><span class="o">[</span><span class="ss">:passengers</span><span class="o">]</span>
+              <span class="k">else</span>
+                <span class="mi">0</span>
+              <span class="k">end</span>
+            <span class="k">end</span>
+          <span class="k">end</span>
+          </pre></div>
       </td>
     </tr>
     <tr id='section-5'>
@@ -107,7 +120,7 @@
 <p> Returns the <code>diesel emission factor</code> (<em>kg CO<sub>2</sub>e / l</em>).</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre></pre></div>
+        <div class='highlight'><pre>          <span class="n">committee</span> <span class="ss">:diesel_emission_factor</span> <span class="k">do</span></pre></div>
       </td>
     </tr>
     <tr id='section-6'>
@@ -122,7 +135,12 @@
 <p> Looks up <a href="http://data.brighterplanet.com/fuel_types">Distillate Fuel Oil 2</a>&rsquo;s <code>emission factor</code> (<em>kg CO<sub>2</sub>e / l</em>).</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre></pre></div>
+        <div class='highlight'><pre>            <span class="n">quorum</span> <span class="s1">&#39;default&#39;</span> <span class="k">do</span>
+              <span class="n">diesel</span> <span class="o">=</span> <span class="no">FuelType</span><span class="o">.</span><span class="n">find_by_name</span> <span class="s2">&quot;Distillate Fuel Oil 2&quot;</span>
+              <span class="n">diesel</span><span class="o">.</span><span class="n">emission_factor</span>
+            <span class="k">end</span>
+          <span class="k">end</span>
+          </pre></div>
       </td>
     </tr>
     <tr id='section-7'>
@@ -135,7 +153,7 @@
 <p> Returns the <code>electricity emission factor</code> (<em>kg CO<sub>2</sub>e / kWh</em>).</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre></pre></div>
+        <div class='highlight'><pre>          <span class="n">committee</span> <span class="ss">:electricity_emission_factor</span> <span class="k">do</span></pre></div>
       </td>
     </tr>
     <tr id='section-8'>
@@ -154,7 +172,14 @@
 </ul>
       </td>
       <td class=code>
-        <div class='highlight'><pre></pre></div>
+        <div class='highlight'><pre>            <span class="n">quorum</span> <span class="s1">&#39;default&#39;</span> <span class="k">do</span>
+              <span class="n">subregion</span> <span class="o">=</span> <span class="no">EgridSubregion</span><span class="o">.</span><span class="n">find_by_abbreviation</span> <span class="s2">&quot;US&quot;</span>
+              <span class="n">region</span> <span class="o">=</span> <span class="n">subregion</span><span class="o">.</span><span class="n">egrid_region</span>
+              <span class="n">emission_factor</span> <span class="o">=</span> <span class="n">subregion</span><span class="o">.</span><span class="n">electricity_emission_factor</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">region</span><span class="o">.</span><span class="n">loss_factor</span><span class="p">)</span>
+              <span class="n">emission_factor</span>
+            <span class="k">end</span>
+          <span class="k">end</span>
+          </pre></div>
       </td>
     </tr>
     <tr id='section-9'>
@@ -167,7 +192,7 @@
 <p> Returns the <code>diesel use</code> (<em>l</em>).</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre></pre></div>
+        <div class='highlight'><pre>          <span class="n">committee</span> <span class="ss">:diesel_consumed</span> <span class="k">do</span></pre></div>
       </td>
     </tr>
     <tr id='section-10'>
@@ -182,7 +207,11 @@
 <p> Multiplies <code>distance</code> (<em>km</em>) by <code>diesel intensity</code> (<em>l / km</em>) to give <em>l</em>.</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre></pre></div>
+        <div class='highlight'><pre>            <span class="n">quorum</span> <span class="s1">&#39;from distance and diesel intensity&#39;</span><span class="p">,</span> <span class="ss">:needs</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="ss">:distance</span><span class="p">,</span> <span class="ss">:diesel_intensity</span><span class="o">]</span> <span class="k">do</span> <span class="o">|</span><span class="n">characteristics</span><span class="o">|</span>
+              <span class="n">characteristics</span><span class="o">[</span><span class="ss">:distance</span><span class="o">]</span> <span class="o">*</span> <span class="n">characteristics</span><span class="o">[</span><span class="ss">:diesel_intensity</span><span class="o">]</span>
+            <span class="k">end</span>
+          <span class="k">end</span>
+          </pre></div>
       </td>
     </tr>
     <tr id='section-11'>
@@ -195,7 +224,7 @@
 <p> Returns the <code>electricity use</code> (<em>kWh</em>).</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre></pre></div>
+        <div class='highlight'><pre>          <span class="n">committee</span> <span class="ss">:electricity_consumed</span> <span class="k">do</span></pre></div>
       </td>
     </tr>
     <tr id='section-12'>
@@ -210,7 +239,11 @@
 <p> Multiplies <code>distance</code> (<em>km</em>) by <code>electricity intensity</code> (<em>kWh / km</em>) to give <em>kWh</em>.</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre></pre></div>
+        <div class='highlight'><pre>            <span class="n">quorum</span> <span class="s1">&#39;from distance and electricity intensity&#39;</span><span class="p">,</span> <span class="ss">:needs</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="ss">:distance</span><span class="p">,</span> <span class="ss">:electricity_intensity</span><span class="o">]</span> <span class="k">do</span> <span class="o">|</span><span class="n">characteristics</span><span class="o">|</span>
+              <span class="n">characteristics</span><span class="o">[</span><span class="ss">:distance</span><span class="o">]</span> <span class="o">*</span> <span class="n">characteristics</span><span class="o">[</span><span class="ss">:electricity_intensity</span><span class="o">]</span>
+            <span class="k">end</span>
+          <span class="k">end</span>
+          </pre></div>
       </td>
     </tr>
     <tr id='section-13'>
@@ -223,7 +256,7 @@
 <p> Returns the <code>distance</code> traveled (<em>km</em>).</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre></pre></div>
+        <div class='highlight'><pre>          <span class="n">committee</span> <span class="ss">:distance</span> <span class="k">do</span></pre></div>
       </td>
     </tr>
     <tr id='section-14'>
@@ -238,7 +271,7 @@
 <p> Uses the client-input <code>distance</code> (<em>km</em>).</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre></pre></div>
+        <div class='highlight'><pre>            </pre></div>
       </td>
     </tr>
     <tr id='section-15'>
@@ -253,7 +286,10 @@
 <p> Multiplies the <code>duration</code> (<em>hours</em>) by the <code>speed</code> (<em>km / hour</em>) to give <em>km</em>.</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre></pre></div>
+        <div class='highlight'><pre>            <span class="n">quorum</span> <span class="s1">&#39;from duration and speed&#39;</span><span class="p">,</span> <span class="ss">:needs</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="ss">:duration</span><span class="p">,</span> <span class="ss">:speed</span><span class="o">]</span> <span class="k">do</span> <span class="o">|</span><span class="n">characteristics</span><span class="o">|</span>
+              <span class="n">characteristics</span><span class="o">[</span><span class="ss">:duration</span><span class="o">]</span> <span class="o">*</span> <span class="n">characteristics</span><span class="o">[</span><span class="ss">:speed</span><span class="o">]</span>
+            <span class="k">end</span>
+            </pre></div>
       </td>
     </tr>
     <tr id='section-16'>
@@ -268,7 +304,11 @@
 <p> Looks up the <a href="http://data.brighterplanet.com/rail_classes">rail class</a> <code>distance</code>.</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre></pre></div>
+        <div class='highlight'><pre>            <span class="n">quorum</span> <span class="s1">&#39;from rail class&#39;</span><span class="p">,</span> <span class="ss">:needs</span> <span class="o">=&gt;</span> <span class="ss">:rail_class</span> <span class="k">do</span> <span class="o">|</span><span class="n">characteristics</span><span class="o">|</span>
+              <span class="n">characteristics</span><span class="o">[</span><span class="ss">:rail_class</span><span class="o">].</span><span class="n">distance</span>
+            <span class="k">end</span>
+          <span class="k">end</span>
+          </pre></div>
       </td>
     </tr>
     <tr id='section-17'>
@@ -287,7 +327,7 @@
 <p> Uses the client-input <code>duration</code> (<em>hours</em>).</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre></pre></div>
+        <div class='highlight'><pre>          </pre></div>
       </td>
     </tr>
     <tr id='section-18'>
@@ -300,7 +340,7 @@
 <p> Returns the <code>diesel intensity</code> (<em>l / km</em>).</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre></pre></div>
+        <div class='highlight'><pre>          <span class="n">committee</span> <span class="ss">:diesel_intensity</span> <span class="k">do</span></pre></div>
       </td>
     </tr>
     <tr id='section-19'>
@@ -315,7 +355,11 @@
 <p> Looks up the <a href="http://data.brighterplanet.com/rail_classes">rail class</a> <code>diesel intensity</code>.</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre></pre></div>
+        <div class='highlight'><pre>            <span class="n">quorum</span> <span class="s1">&#39;from rail class&#39;</span><span class="p">,</span> <span class="ss">:needs</span> <span class="o">=&gt;</span> <span class="ss">:rail_class</span> <span class="k">do</span> <span class="o">|</span><span class="n">characteristics</span><span class="o">|</span>
+              <span class="n">characteristics</span><span class="o">[</span><span class="ss">:rail_class</span><span class="o">].</span><span class="n">diesel_intensity</span>
+            <span class="k">end</span>
+          <span class="k">end</span>
+          </pre></div>
       </td>
     </tr>
     <tr id='section-20'>
@@ -328,7 +372,7 @@
 <p> Returns the <code>electricity intensity</code> (<em>kWh / km</em>).</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre></pre></div>
+        <div class='highlight'><pre>          <span class="n">committee</span> <span class="ss">:electricity_intensity</span> <span class="k">do</span></pre></div>
       </td>
     </tr>
     <tr id='section-21'>
@@ -343,7 +387,11 @@
 <p> Looks up the <a href="http://data.brighterplanet.com/rail_classes">rail class</a> <code>electricity intensity</code>.</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre></pre></div>
+        <div class='highlight'><pre>            <span class="n">quorum</span> <span class="s1">&#39;from rail class&#39;</span><span class="p">,</span> <span class="ss">:needs</span> <span class="o">=&gt;</span> <span class="ss">:rail_class</span> <span class="k">do</span> <span class="o">|</span><span class="n">characteristics</span><span class="o">|</span>
+              <span class="n">characteristics</span><span class="o">[</span><span class="ss">:rail_class</span><span class="o">].</span><span class="n">electricity_intensity</span>
+            <span class="k">end</span>
+          <span class="k">end</span>
+          </pre></div>
       </td>
     </tr>
     <tr id='section-22'>
@@ -356,7 +404,7 @@
 <p> Returns the average <code>speed</code> (<em>km / hour</em>).</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre></pre></div>
+        <div class='highlight'><pre>          <span class="n">committee</span> <span class="ss">:speed</span> <span class="k">do</span></pre></div>
       </td>
     </tr>
     <tr id='section-23'>
@@ -371,7 +419,11 @@
 <p> Looks up the <a href="http://data.brighterplanet.com/rail_classes">rail class</a> <code>speed</code>.</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre></pre></div>
+        <div class='highlight'><pre>            <span class="n">quorum</span> <span class="s1">&#39;from rail class&#39;</span><span class="p">,</span> <span class="ss">:needs</span> <span class="o">=&gt;</span> <span class="ss">:rail_class</span><span class="p">,</span> <span class="ss">:complies</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="ss">:ghg_protocol</span><span class="p">,</span> <span class="ss">:iso</span><span class="p">,</span> <span class="ss">:tcr</span><span class="o">]</span> <span class="k">do</span> <span class="o">|</span><span class="n">characteristics</span><span class="o">|</span>
+              <span class="n">characteristics</span><span class="o">[</span><span class="ss">:rail_class</span><span class="o">].</span><span class="n">speed</span>
+            <span class="k">end</span>
+          <span class="k">end</span>
+          </pre></div>
       </td>
     </tr>
     <tr id='section-24'>
@@ -384,7 +436,7 @@
 <p> Returns the total number of <code>passengers</code>.</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre></pre></div>
+        <div class='highlight'><pre>          <span class="n">committee</span> <span class="ss">:passengers</span> <span class="k">do</span></pre></div>
       </td>
     </tr>
     <tr id='section-25'>
@@ -399,7 +451,11 @@
 <p> Looks up the <a href="http://data.brighterplanet.com/rail_classes">rail class</a> <code>passengers</code>.</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre></pre></div>
+        <div class='highlight'><pre>            <span class="n">quorum</span> <span class="s1">&#39;from rail class&#39;</span><span class="p">,</span> <span class="ss">:needs</span> <span class="o">=&gt;</span> <span class="ss">:rail_class</span><span class="p">,</span> <span class="ss">:complies</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="ss">:ghg_protocol</span><span class="p">,</span> <span class="ss">:iso</span><span class="p">,</span> <span class="ss">:tcr</span><span class="o">]</span>  <span class="k">do</span> <span class="o">|</span><span class="n">characteristics</span><span class="o">|</span>
+              <span class="n">characteristics</span><span class="o">[</span><span class="ss">:rail_class</span><span class="o">].</span><span class="n">passengers</span>
+            <span class="k">end</span>
+          <span class="k">end</span>
+          </pre></div>
       </td>
     </tr>
     <tr id='section-26'>
@@ -413,7 +469,7 @@
  This is the type of rail the trip used.</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre></pre></div>
+        <div class='highlight'><pre>          <span class="n">committee</span> <span class="ss">:rail_class</span> <span class="k">do</span></pre></div>
       </td>
     </tr>
     <tr id='section-27'>
@@ -428,7 +484,7 @@
 <p> Uses the client-input <a href="http://data.brighterplanet.com/rail_classes">rail class</a>.</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre></pre></div>
+        <div class='highlight'><pre>            </pre></div>
       </td>
     </tr>
     <tr id='section-28'>
@@ -443,7 +499,11 @@
 <p> Uses an artificial <a href="http://data.brighterplanet.com/rail_classes">rail class</a> representing the U.S. average.</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre></pre></div>
+        <div class='highlight'><pre>            <span class="n">quorum</span> <span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="ss">:complies</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="ss">:ghg_protocol</span><span class="p">,</span> <span class="ss">:iso</span><span class="p">,</span> <span class="ss">:tcr</span><span class="o">]</span> <span class="k">do</span>
+              <span class="no">RailClass</span><span class="o">.</span><span class="n">find_by_name</span> <span class="s2">&quot;US average&quot;</span>
+            <span class="k">end</span>
+          <span class="k">end</span>
+          </pre></div>
       </td>
     </tr>
     <tr id='section-29'>
@@ -456,7 +516,7 @@
 <p> Returns the <code>date</code> on which the trip occurred.</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre></pre></div>
+        <div class='highlight'><pre>          <span class="n">committee</span> <span class="ss">:date</span> <span class="k">do</span></pre></div>
       </td>
     </tr>
     <tr id='section-30'>
@@ -471,7 +531,7 @@
 <p> Uses the client-input <code>date</code>.</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre></pre></div>
+        <div class='highlight'><pre>            </pre></div>
       </td>
     </tr>
     <tr id='section-31'>
@@ -486,7 +546,11 @@
 <p> Assumes the trip occurred on the first day of the <code>timeframe</code>.</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre></pre></div>
+        <div class='highlight'><pre>            <span class="n">quorum</span> <span class="s1">&#39;from timeframe&#39;</span><span class="p">,</span> <span class="ss">:complies</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="ss">:ghg_protocol</span><span class="p">,</span> <span class="ss">:iso</span><span class="p">,</span> <span class="ss">:tcr</span><span class="o">]</span> <span class="k">do</span> <span class="o">|</span><span class="n">characteristics</span><span class="p">,</span> <span class="n">timeframe</span><span class="o">|</span>
+              <span class="n">timeframe</span><span class="o">.</span><span class="n">from</span>
+            <span class="k">end</span>
+          <span class="k">end</span>
+          </pre></div>
       </td>
     </tr>
     <tr id='section-32'>
@@ -500,7 +564,7 @@
  This is the period during which to calculate emissions.</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre></pre></div>
+        <div class='highlight'><pre>            </pre></div>
       </td>
     </tr>
     <tr id='section-33'>
@@ -515,7 +579,7 @@
 <p> Uses the client-input <code>timeframe</code>.</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre></pre></div>
+        <div class='highlight'><pre>            </pre></div>
       </td>
     </tr>
     <tr id='section-34'>
@@ -531,7 +595,11 @@
 
       </td>
       <td class=code>
-        <div class='highlight'><pre></pre></div>
+        <div class='highlight'><pre>        <span class="k">end</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span></pre></div>
       </td>
     </tr>
     </table>
