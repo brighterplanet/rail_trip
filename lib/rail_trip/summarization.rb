@@ -20,7 +20,7 @@ module BrighterPlanet
         # This `summarize` block encapsulates the summarization strategy, including
         # terminology and inflection preference.
         base.summarize do |has|
-          has.adjective lambda { |rail_trip| "#{rail_trip.distance_in_miles.adaptive_round(1)}-mile" }, :if => :distance
+          has.adjective lambda { |rail_trip| "#{rail_trip.distance.convert(:kilometres, :miles).round(1)}-mile" }, :if => :distance
           has.adjective lambda { |rail_trip| "#{rail_trip.duration}-hour" }, :if => :duration
           has.identity 'rail trip'
           has.verb :take
