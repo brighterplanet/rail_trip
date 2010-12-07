@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    rail_trip (0.0.12)
+    rail_trip (0.0.14)
       emitter (~> 0.3)
 
 GEM
