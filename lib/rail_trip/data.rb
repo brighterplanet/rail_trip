@@ -21,10 +21,10 @@ module BrighterPlanet
           schema do
             string  'rail_class_name'
             float   'duration'
-            float   'distance'
+            float   'distance_estimate'
             date    'date'
           end
-
+          
           # This `process` block indicates that RailTrip's associated classes
           # should populate themselves according to their own DataMiner
           # instructions.

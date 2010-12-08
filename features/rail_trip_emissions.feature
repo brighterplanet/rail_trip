@@ -17,8 +17,8 @@ Feature: Rail Trip Emissions Calculations
       | 2010-07-12 | 2010-07-01/2010-07-30 | 3.17     |
       | 2010-07-12 | 2010-07-15/2010-07-30 | 0.0      |
 
-  Scenario: Calculations for rail trip from distance
-    Given a rail trip has "distance" of "100"
+  Scenario: Calculations for rail trip from distance estimate
+    Given a rail trip has "distance_estimate" of "100"
     When emissions are calculated
     Then the emission value should be within "0.01" kgs of "22.98"
 

@@ -103,10 +103,13 @@ module BrighterPlanet
           ### Distance calculation
           # Returns the `distance` traveled (*km*).
           committee :distance do
-            #### Distance from client input
-            # **Complies:** All
+            #### Distance from distance estimate
+            # **Complies:** GHG Protocol, ISO-140641, Climate Registry Protocol
             #
-            # Uses the client-input `distance` (*km*).
+            # Uses the `distance estimate` (*km*).
+            quorum 'from distance estimate', :needs => :distance_estimate, :complies => [:ghg_protocol, :iso, :tcr] do |characteristics|
+              characteristics[:distance_estimate]
+            end
             
             #### Distance from duration and speed
             # **Complies:** GHG Protocol, ISO-140641, Climate Registry Protocol
@@ -124,6 +127,13 @@ module BrighterPlanet
               characteristics[:rail_class].distance
             end
           end
+          
+          ### Distance estimate calculation
+          # Returns the trip's `distance estimate` (*km*)
+            #### Distance estimate from client input
+            # **Complies:** All
+            #
+            # Uses the client-input `distance estimate` (*km*).
           
           ### Duration calculation
           # Returns the trip's `duration` (*hours*).
