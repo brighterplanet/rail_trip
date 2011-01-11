@@ -24,7 +24,7 @@ module BrighterPlanet
         base.characterize do
           has :rail_class
           has :duration, :measures => :time
-          has :distance, :measures => :length
+          has :distance_estimate, :measures => :length
           has :date
         end
         

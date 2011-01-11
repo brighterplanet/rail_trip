@@ -36,7 +36,7 @@ module BrighterPlanet
             # - Adds diesel and electricity emissions to give total emissions (*kg CO<sub>2</sub>e*)
             # - Divides by passengers to give emissions per passenger (*kg CO<sub>2</sub>e*)
             # - If the trip did not occur during the `timeframe`, `emission` is zero
-            quorum 'from date, fuel, emission factors, and passengers', :needs => [:diesel_consumed, :diesel_emission_factor, :electricity_consumed, :electricity_emission_factor, :passengers, :date] do |characteristics, timeframe|
+            quorum 'from date, fuel, emission factors, and passengers', :needs => [:diesel_consumed, :diesel_emission_factor, :electricity_consumed, :electricity_emission_factor, :passengers, :date], :complies => [:ghg_protocol, :iso, :tcr] do |characteristics, timeframe|
               date = characteristics[:date].is_a?(Date) ? characteristics[:date] : Date.parse(characteristics[:date].to_s)
               if timeframe.include? date
                 (characteristics[:diesel_consumed] * characteristics[:diesel_emission_factor] + characteristics[:electricity_consumed] * characteristics[:electricity_emission_factor]) / characteristics[:passengers]
@@ -53,7 +53,7 @@ module BrighterPlanet
             # **Complies:** GHG Protocol, ISO 14064-1, Climate Registry Protocol
             #
             # Looks up [Distillate Fuel Oil 2](http://data.brighterplanet.com/fuel_types)'s `emission factor` (*kg CO<sub>2</sub>e / l*).
-            quorum 'default' do
+            quorum 'default', :complies => [:ghg_protocol, :iso, :tcr] do
               diesel = FuelType.find_by_name "Distillate Fuel Oil 2"
               diesel.emission_factor
             end
@@ -68,7 +68,7 @@ module BrighterPlanet
             # - Looks up the [U.S. Average](http://data.brighterplanet.com/egrid_subregions) `electricity emission factor` (*kg CO<sub>2</sub>e / l*)
             # - Looks up the [U.S. Average](http://data.brighterplanet.com/egrid_regions) grid region `loss factor`
             # - Divides the `electricity emission factor` by (1 - `loss factor`) to account for transmission and distribution losses
-            quorum 'default' do
+            quorum 'default', :complies => [:ghg_protocol, :iso, :tcr] do
               subregion = EgridSubregion.find_by_abbreviation "US"
               region = subregion.egrid_region
               emission_factor = subregion.electricity_emission_factor / (1 - region.loss_factor)
@@ -83,7 +83,7 @@ module BrighterPlanet
             # **Complies:** GHG Protocol, ISO-140641, Climate Registry Protocol
             #
             # Multiplies `distance` (*km*) by `diesel intensity` (*l / km*) to give *l*.
-            quorum 'from distance and diesel intensity', :needs => [:distance, :diesel_intensity] do |characteristics|
+            quorum 'from distance and diesel intensity', :needs => [:distance, :diesel_intensity], :complies => [:ghg_protocol, :iso, :tcr] do |characteristics|
               characteristics[:distance] * characteristics[:diesel_intensity]
             end
           end
@@ -95,7 +95,7 @@ module BrighterPlanet
             # **Complies:** GHG Protocol, ISO-140641, Climate Registry Protocol
             #
             # Multiplies `distance` (*km*) by `electricity intensity` (*kWh / km*) to give *kWh*.
-            quorum 'from distance and electricity intensity', :needs => [:distance, :electricity_intensity] do |characteristics|
+            quorum 'from distance and electricity intensity', :needs => [:distance, :electricity_intensity], :complies => [:ghg_protocol, :iso, :tcr] do |characteristics|
               characteristics[:distance] * characteristics[:electricity_intensity]
             end
           end
@@ -103,16 +103,19 @@ module BrighterPlanet
           ### Distance calculation
           # Returns the `distance` traveled (*km*).
           committee :distance do
-            #### Distance from client input
-            # **Complies:** All
+            #### Distance from distance estimate
+            # **Complies:** GHG Protocol, ISO-140641, Climate Registry Protocol
             #
-            # Uses the client-input `distance` (*km*).
+            # Uses the `distance estimate` (*km*).
+            quorum 'from distance estimate', :needs => :distance_estimate, :complies => [:ghg_protocol, :iso, :tcr] do |characteristics|
+              characteristics[:distance_estimate]
+            end
             
             #### Distance from duration and speed
             # **Complies:** GHG Protocol, ISO-140641, Climate Registry Protocol
             #
             # Multiplies the `duration` (*hours*) by the `speed` (*km / hour*) to give *km*.
-            quorum 'from duration and speed', :needs => [:duration, :speed] do |characteristics|
+            quorum 'from duration and speed', :needs => [:duration, :speed], :complies => [:ghg_protocol, :iso, :tcr] do |characteristics|
               characteristics[:duration] * characteristics[:speed]
             end
             
@@ -120,10 +123,17 @@ module BrighterPlanet
             # **Complies:** GHG Protocol, ISO-140641, Climate Registry Protocol
             #
             # Looks up the [rail class](http://data.brighterplanet.com/rail_classes) `distance`.
-            quorum 'from rail class', :needs => :rail_class do |characteristics|
+            quorum 'from rail class', :needs => :rail_class, :complies => [:ghg_protocol, :iso, :tcr] do |characteristics|
               characteristics[:rail_class].distance
             end
           end
+          
+          ### Distance estimate calculation
+          # Returns the trip's `distance estimate` (*km*)
+            #### Distance estimate from client input
+            # **Complies:** All
+            #
+            # Uses the client-input `distance estimate` (*km*).
           
           ### Duration calculation
           # Returns the trip's `duration` (*hours*).
@@ -139,7 +149,7 @@ module BrighterPlanet
             # **Complies:** GHG Protocol, ISO-140641, Climate Registry Protocol
             #
             # Looks up the [rail class](http://data.brighterplanet.com/rail_classes) `diesel intensity`.
-            quorum 'from rail class', :needs => :rail_class do |characteristics|
+            quorum 'from rail class', :needs => :rail_class, :complies => [:ghg_protocol, :iso, :tcr] do |characteristics|
               characteristics[:rail_class].diesel_intensity
             end
           end
@@ -151,7 +161,7 @@ module BrighterPlanet
             # **Complies:** GHG Protocol, ISO-140641, Climate Registry Protocol
             #
             # Looks up the [rail class](http://data.brighterplanet.com/rail_classes) `electricity intensity`.
-            quorum 'from rail class', :needs => :rail_class do |characteristics|
+            quorum 'from rail class', :needs => :rail_class, :complies => [:ghg_protocol, :iso, :tcr] do |characteristics|
               characteristics[:rail_class].electricity_intensity
             end
           end

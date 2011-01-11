@@ -36,6 +36,13 @@ Feature: Rail Trip Committee Calculations
     When the "diesel_intensity" committee is calculated
     Then the conclusion of the committee should be "0.75"
 
+  Scenario: Distance committee from distance estimate
+    Given a rail trip emitter
+    And a characteristic "distance_estimate" of "230"
+    When the "distance" committee is calculated
+    Then the committee should have used quorum "from distance estimate"
+    And the conclusion of the committee should be "230.0"
+
   Scenario: Distance committee from duration and speed
     Given a rail trip emitter
     And a characteristic "duration" of "2"
