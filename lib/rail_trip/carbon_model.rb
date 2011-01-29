@@ -123,7 +123,7 @@ module BrighterPlanet
             # **Complies:** GHG Protocol, ISO-140641, Climate Registry Protocol
             #
             # Looks up the [rail class](http://data.brighterplanet.com/rail_classes) `distance`.
-            quorum 'from rail class', :needs => :rail_class, :complies => [:ghg_protocol, :iso, :tcr] do |characteristics|
+            quorum 'from rail class', :needs => :rail_class do |characteristics|
               characteristics[:rail_class].distance
             end
           end
