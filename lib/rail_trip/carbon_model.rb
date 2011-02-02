@@ -52,9 +52,9 @@ module BrighterPlanet
             #### Default diesel emission factor
             # **Complies:** GHG Protocol, ISO 14064-1, Climate Registry Protocol
             #
-            # Looks up [Distillate Fuel Oil 2](http://data.brighterplanet.com/fuel_types)'s `emission factor` (*kg CO<sub>2</sub>e / l*).
+            # Looks up [Distillate Fuel No. 2](http://data.brighterplanet.com/fuel_types)'s `emission factor` (*kg CO<sub>2</sub>e / l*).
             quorum 'default', :complies => [:ghg_protocol, :iso, :tcr] do
-              diesel = FuelType.find_by_name "Distillate Fuel Oil 2"
+              diesel = FuelType.find_by_name "Distillate Fuel No. 2"
               diesel.emission_factor
             end
           end
