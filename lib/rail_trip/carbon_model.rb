@@ -50,13 +50,12 @@ module BrighterPlanet
           # Returns the `diesel emission factor` (*kg CO<sub>2</sub>e / l*).
           committee :diesel_emission_factor do
             #### Default diesel emission factor
-            # **Complies:** GHG Protocol Scope 3, ISO 14064-1, Climate Registry Protocol
-            quorum 'default', :complies => [:ghg_protocol_scope_3, :iso, :tcr] do
-              # - Looks up [Distillate Fuel Oil No. 2](http://data.brighterplanet.com/fuel_types)
-              # - Calculates its `emission factor` by multiplying `energy content` (*MJ / l*) by `carbon content` (*g carbon / MJ*) to give *g carbon / l*
-              # - Converts from grams to kilograms and carbon to CO<sub>2</sub> to give *kg CO<sub>2</sub> / l diesel*
+            quorum 'default',
+              # **Complies:** GHG Protocol Scope 3, ISO 14064-1, Climate Registry Protocol
+              :complies => [:ghg_protocol_scope_3, :iso, :tcr] do
+              # Looks up [Distillate Fuel Oil No. 2](http://data.brighterplanet.com/fuel_types)'s `co2 emission factor` (*kg / l*).
               diesel = Fuel.find_by_name "Distillate Fuel Oil No. 2"
-              (diesel.energy_content * diesel.carbon_content).grams.to(:kilograms).carbon.to(:co2)
+              diesel.co2_emission_factor
             end
           end
           

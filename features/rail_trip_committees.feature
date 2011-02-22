@@ -80,4 +80,4 @@ Feature: Rail Trip Committee Calculations
   Scenario: Diesel emission factor from default
     Given a rail trip emitter
     When the "diesel_emission_factor" committee is calculated
-    Then the conclusion of the committee should be "2.64733"
+    Then the conclusion of the committee should be "2.7"
