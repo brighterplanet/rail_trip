@@ -16,7 +16,7 @@ Feature: Rail Trip Committee Calculations
     Given a rail trip emitter
     And a characteristic "rail_class.name" of "commuter rail"
     When the "passengers" committee is calculated
-    Then the conclusion of the committee should be "25.0"
+    Then the conclusion of the committee should be "36.0"
 
   Scenario: Speed committee from rail class
     Given a rail trip emitter
@@ -28,13 +28,13 @@ Feature: Rail Trip Committee Calculations
     Given a rail trip emitter
     And a characteristic "rail_class.name" of "commuter rail"
     When the "electricity_intensity" committee is calculated
-    Then the conclusion of the committee should be "12.0"
+    Then the conclusion of the committee should be "3.8"
 
   Scenario: Diesel intensity committee from rail class
     Given a rail trip emitter
     And a characteristic "rail_class.name" of "commuter rail"
     When the "diesel_intensity" committee is calculated
-    Then the conclusion of the committee should be "0.75"
+    Then the conclusion of the committee should be "0.7"
 
   Scenario: Distance committee from distance estimate
     Given a rail trip emitter
@@ -56,7 +56,7 @@ Feature: Rail Trip Committee Calculations
     And a characteristic "rail_class.name" of "commuter rail"
     When the "distance" committee is calculated
     Then the committee should have used quorum "from rail class"
-    And the conclusion of the committee should be "10.0"
+    And the conclusion of the committee should be "38.0"
 
   Scenario: Electricity consumed committee from distance and electricity intensity
     Given a rail trip emitter
@@ -75,9 +75,9 @@ Feature: Rail Trip Committee Calculations
   Scenario: Electricity emission factor from default
     Given a rail trip emitter
     When the "electricity_emission_factor" committee is calculated
-    Then the conclusion of the committee should be "1.0"
+    Then the conclusion of the committee should be "0.63830"
 
   Scenario: Diesel emission factor from default
     Given a rail trip emitter
     When the "diesel_emission_factor" committee is calculated
-    Then the conclusion of the committee should be "2.0"
+    Then the conclusion of the committee should be "2.64733"
