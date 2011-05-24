@@ -53,7 +53,7 @@ module BrighterPlanet
             quorum 'default',
               # **Complies:** GHG Protocol Scope 3, ISO 14064-1, Climate Registry Protocol
               :complies => [:ghg_protocol_scope_3, :iso, :tcr] do
-              # Looks up [Distillate Fuel Oil No. 2](http://data.brighterplanet.com/fuel_types)'s `co2 emission factor` (*kg / l*).
+              # Looks up [Distillate Fuel Oil No. 2](http://data.brighterplanet.com/fuels)'s `co2 emission factor` (*kg / l*).
               diesel = Fuel.find_by_name "Distillate Fuel Oil No. 2"
               diesel.co2_emission_factor
             end
