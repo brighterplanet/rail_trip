@@ -15,20 +15,11 @@ module BrighterPlanet
     #
     module Data
       def self.included(base)
-        ##### The carbon model
-        base.data_miner do
-          # This `schema` block encapsulates the persistence schema.
-          schema do
-            string  'rail_class_name'
-            float   'duration'
-            float   'distance_estimate'
-            date    'date'
-          end
-          
-          # This `process` block indicates that RailTrip's associated classes
-          # should populate themselves according to their own DataMiner
-          # instructions.
-          process :run_data_miner_on_belongs_to_associations
+        base.create_table do
+          string  'rail_class_name'
+          float   'duration'
+          float   'distance_estimate'
+          date    'date'
         end
       end
     end
