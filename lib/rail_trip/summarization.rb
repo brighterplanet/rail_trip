@@ -1,5 +1,5 @@
 # Rail trip's summarization strategy is implemented using a domain-specific language
-# provided by [Summary Judgement](http://github.com/rossmeissl/summary_judgement).
+# provided by [Summary Judgement](https://github.com/rossmeissl/summary_judgement).
 module BrighterPlanet
   module RailTrip
 
@@ -11,7 +11,7 @@ module BrighterPlanet
     # For more information see:
     #
     #   * [API documentation](http://carbon.brighterplanet.com/rail_trips/options)
-    #   * [Source code](http://github.com/brighterplanet/rail_trip)
+    #   * [Source code](https://github.com/brighterplanet/rail_trip)
     #
     module Summarization
       def self.included(base)

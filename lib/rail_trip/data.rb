@@ -1,5 +1,5 @@
 # Rail trip's persistence schema is defined using a domain-specific language
-# provided by [Data Miner](http://github.com/seamusabshere/data_miner).
+# provided by [Data Miner](https://github.com/seamusabshere/data_miner).
 module BrighterPlanet
   module RailTrip
 
@@ -11,7 +11,7 @@ module BrighterPlanet
     # For more information see:
     #
     #   * [API documentation](http://carbon.brighterplanet.com/rail_trips/options)
-    #   * [Source code](http://github.com/brighterplanet/rail_trip)
+    #   * [Source code](https://github.com/brighterplanet/rail_trip)
     #
     module Data
       def self.included(base)
