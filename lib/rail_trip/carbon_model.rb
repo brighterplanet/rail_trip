@@ -24,203 +24,350 @@ module BrighterPlanet
     module CarbonModel
       def self.included(base)
         base.decide :emission, :with => :characteristics do
-          ### Emission calculation
-          # Returns the `emission` estimate (*kg CO<sub>2</sub>e*).
           committee :emission do
-            #### From fuel and passengers
-            quorum 'from date, fuel, emission factors, and passengers', :needs => [:diesel_consumed, :diesel_emission_factor, :electricity_consumed, :electricity_emission_factor, :passengers, :date],
-              # **Complies:** GHG Protocol Scope 3, ISO-140641, Climate Registry Protocol
+            quorum 'from diesel emission, electricity emission, verified date, and timeframe', :needs => [:diesel_emission, :electricity_emission, :verified_date],
               :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics, timeframe|
-                date = characteristics[:date].is_a?(Date) ? characteristics[:date] : Date.parse(characteristics[:date].to_s)
-                # Checks whether the trip occurred during the `timeframe`
-                if timeframe.include? date
-                  # - Multiplies `diesel use` (*l*) by the `diesel emission factor` (*kg / l*) to give diesel emissions (*kg CO<sub>2</sub>*)
-                  # - Multiplies `electricity use` (*kWh*) by the `electricity emission factor` (*kg CO<sub>2</sub>e / kWh*) to give electricity emissions (*kg CO<sub>2</sub>e*)
-                  # - Adds diesel and electricity emissions to give total emissions (*kg CO<sub>2</sub>e*)
-                  # - Divides by passengers to give emissions per passenger (*kg CO<sub>2</sub>e*)
-                  (characteristics[:diesel_consumed] * characteristics[:diesel_emission_factor] + characteristics[:electricity_consumed] * characteristics[:electricity_emission_factor]) / characteristics[:passengers]
+                # Checks whether the trip occurred during the `timeframe`.
+                if timeframe.include? characteristics[:verified_date]
+                  # Sums the `diesel emission` (*kg CO<sub>2</sub>e*) and `electricity emission` (*kg CO<sub>2</sub>e*) to give (*kg CO<sub>2</sub>e*).
+                  characteristics[:diesel_emission] + characteristics[:electricity_emission]
                 else
-                  # If the trip did not occur during the `timeframe`, `emission` is zero
+                  # If the trip did not occur during the `timeframe`, `emission` is zero.
                   0
                 end
             end
           end
           
-          ### Diesel emission factor calculation
-          # Returns the `diesel emission factor` (*kg CO<sub>2</sub>e / l*).
+          committee :diesel_emission do
+            quorum 'from trip segments', :needs => :trip_segments,
+              :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
+                # Multiplies the `diesel consumption` for each `trip segment` (*kg*) by that segment's `diesel emission factor` (*kg CO<sub>2</sub>e / kg*), and sums to give (*kg CO<sub>2</sub>e).
+                characteristics[:trip_segments].map do |segment|
+                  segment.diesel_consumption * segment.diesel_emission_factor
+                end.sum
+                #FIXME TODO test this
+            end
+            
+            quorum 'from diesel consumption and diesel emission factor', :needs => [:diesel_consumption, :diesel_emission_factor],
+              :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
+                # Multiplies the trip `diesel consumption` by the trip `diesel emission factor` (*kg CO<sub>2</sub>e / kg*) to give (*kg CO<sub>2</sub>e).
+                characteristics[:diesel_consumption] * characteristics[:diesel_emission_factor]
+                #FIXME TODO test this
+            end
+          end
+          
+          committee :electricity_emission do
+            quorum 'from trip segments', :needs => :trip_segments,
+              :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
+                # Multiplies the `electricity consumption` for each `trip segment` (*kg*) by that segment's `electricity emission factor` (*kg CO<sub>2</sub>e / kg*), and sums to give (*kg CO<sub>2</sub>e).
+                characteristics[:trip_segments].map do |segment|
+                  segment.electricity_consumption * segment.electricity_emission_factor
+                end.sum
+                #FIXME TODO test this
+            end
+            
+            quorum 'from electricity consumption and electricity emission factor', :needs => [:electricity_consumption, :electricity_emission_factor],
+              :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
+                # Multiplies the trip `electricity consumption` by the trip `electricity emission factor` (*kg CO<sub>2</sub>e / kg*) to give (*kg CO<sub>2</sub>e).
+                characteristics[:electricity_consumption] * characteristics[:electricity_emission_factor]
+                #FIXME TODO test this
+            end
+          end
+          
+          committee :trip_segments do
+            quorum 'from route', :needs => :route,
+              :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
+                #FIXME TODO based on the mapquest directions, construct an array TripSegments (one for each country the trip passes through), each of which has:
+                # country
+                # rail_class
+                # traction
+                # distance
+                
+                # then, for each segment, calculate as if using the relevant committee:
+                # diesel_consumption
+                # electricity_consumption
+                # diesel_emission_factor
+                # electricity_emission_factor
+                
+                # Maybe put all this calculation in the TripSegment module?
+                
+                #FIXME TODO test this
+            end
+          end
+          
           committee :diesel_emission_factor do
-            #### Default diesel emission factor
-            quorum 'default',
-              # **Complies:** GHG Protocol Scope 3, ISO 14064-1, Climate Registry Protocol
-              :complies => [:ghg_protocol_scope_3, :iso, :tcr] do
-              # Looks up [Distillate Fuel Oil No. 2](http://data.brighterplanet.com/fuels)'s `co2 emission factor` (*kg / l*).
-              diesel = Fuel.find_by_name "Distillate Fuel Oil No. 2"
-              diesel.co2_emission_factor
+            quorum 'from country, rail class, and traction', :needs => [:country_rail_class_traction]
+              :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
+                # Looks up the [country rail class traction](http://data.brighterplanet.com/country_rail_class_tractions) `diesel emission factor` (*kg CO<sub>2</sub>e / passenger-km*).
+                characteristics[:country_rail_class_traction].diesel_emission_factor
+                #FIXME TODO add relevant data to earth
+                #FIXME TODO test this
+            end
+            
+            quorum 'from country and rail class', :needs => [:country_rail_class]
+              :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
+                # Looks up the [country rail class](http://data.brighterplanet.com/country_rail_classes) `diesel emission factor` (*kg CO<sub>2</sub>e / passenger-km*).
+                characteristics[:country_rail_class].diesel_emission_factor
+                #FIXME TODO add relevant data to earth
+                #FIXME TODO test this
+            end
+            
+            quorum 'from country and traction', :needs => [:country_traction]
+              :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
+                # Looks up the [country traction](http://data.brighterplanet.com/country_tractions) `diesel emission factor` (*kg CO<sub>2</sub>e / passenger-km*).
+                characteristics[:country_traction].diesel_emission_factor
+                #FIXME TODO add relevant data to earth
+                #FIXME TODO test this
+            end
+            
+            quorum 'from rail class and traction', :needs => [:rail_class, :traction]
+              :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
+                # Looks up the [rail class traction](http://data.brighterplanet.com/rail_class_tractions) `diesel emission factor` (*kg CO<sub>2</sub>e / passenger-km*).
+                characteristics[:rail_class_traction].diesel_emission_factor
+                #FIXME TODO add relevant data to earth
+                #FIXME TODO test this
+            end
+            
+            quorum 'from rail class', :needs => :rail_class,
+              :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
+                # Looks up the [rail class](http://data.brighterplanet.com/rail_classes) `diesel emission factor` (*kg CO<sub>2</sub>e / passenger-km*).
+                characteristics[:rail_class].diesel_emission_factor
+                #FIXME TODO add relevant data to earth
+                #FIXME TODO test this
+            end
+            
+            quorum 'from traction', :needs => :traction,
+              :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
+                # Looks up the [traction](http://data.brighterplanet.com/tractions) `diesel emission factor` (*kg CO<sub>2</sub>e / passenger-km*).
+                characteristics[:traction].diesel_emission_factor
+                #FIXME TODO add relevant data to earth
+                #FIXME TODO test this
+            end
+            
+            quorum 'from country', :needs => :country,
+              :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
+                # Looks up the [country](http://data.brighterplanet.com/countries) `diesel emission factor` (*kg CO<sub>2</sub>e / passenger-km*).
+                characteristics[:country].diesel_emission_factor
+                #FIXME TODO add relevant data to earth
+                #FIXME TODO test this
             end
           end
           
-          ### Electricity emission factor calculation
-          # Returns the `electricity emission factor` (*kg CO<sub>2</sub>e / kWh*).
           committee :electricity_emission_factor do
-            #### Default electricity emission factor
-            quorum 'default',
-              # **Complies:** GHG Protocol Scope 3, ISO 14064-1, Climate Registry Protocol
-              :complies => [:ghg_protocol_scope_3, :iso, :tcr] do
-                # Looks up the [U.S. Average](http://data.brighterplanet.com/egrid_subregions) `electricity emission factor` (*kg CO<sub>2</sub>e / l*).
-                subregion = EgridSubregion.find_by_abbreviation "US"
-                # Looks up the [U.S. Average](http://data.brighterplanet.com/egrid_regions) grid region `loss factor`.
-                region = subregion.egrid_region
-                # Divides the `electricity emission factor` by (1 - `loss factor`) to account for transmission and distribution losses.
-                emission_factor = subregion.electricity_emission_factor / (1 - region.loss_factor)
-                emission_factor
-            end
-          end
-          
-          ### Diesel consumed calculation
-          # Returns the `diesel use` (*l*).
-          committee :diesel_consumed do
-            #### From distance and diesel intensity
-            quorum 'from distance and diesel intensity', :needs => [:distance, :diesel_intensity],
-              # **Complies:** GHG Protocol Scope 3, ISO-140641, Climate Registry Protocol
+            quorum 'from country, rail class, and traction', :needs => [:country_rail_class_traction]
               :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
-                # Multiplies `distance` (*km*) by `diesel intensity` (*l / km*) to give *l*.
-                characteristics[:distance] * characteristics[:diesel_intensity]
+                # Looks up the [country rail class traction](http://data.brighterplanet.com/country_rail_class_tractions) `electricity emission factor` (*kg CO<sub>2</sub>e / passenger-km*).
+                characteristics[:country_rail_class_traction].electricity_emission_factor
+                #FIXME TODO add relevant data to earth
+                #FIXME TODO test this
             end
-          end
-          
-          ### Electricity consumed calculation
-          # Returns the `electricity use` (*kWh*).
-          committee :electricity_consumed do
-            #### From distance and electricity intensity
-            quorum 'from distance and electricity intensity', :needs => [:distance, :electricity_intensity],
-              # **Complies:** GHG Protocol Scope 3, ISO-140641, Climate Registry Protocol
+            
+            quorum 'from country and rail class', :needs => [:country_rail_class]
               :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
-                # Multiplies `distance` (*km*) by `electricity intensity` (*kWh / km*) to give *kWh*.
-                characteristics[:distance] * characteristics[:electricity_intensity]
+                # Looks up the [country rail class](http://data.brighterplanet.com/country_rail_classes) `electricity emission factor` (*kg CO<sub>2</sub>e / passenger-km*).
+                characteristics[:country_rail_class].electricity_emission_factor
+                #FIXME TODO add relevant data to earth
+                #FIXME TODO test this
+            end
+            
+            quorum 'from country and traction', :needs => [:country_traction]
+              :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
+                # Looks up the [country traction](http://data.brighterplanet.com/country_tractions) `electricity emission factor` (*kg CO<sub>2</sub>e / passenger-km*).
+                characteristics[:country_traction].electricity_emission_factor
+                #FIXME TODO add relevant data to earth
+                #FIXME TODO test this
+            end
+            
+            quorum 'from rail class and traction', :needs => [:rail_class, :traction]
+              :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
+                # Looks up the [rail class traction](http://data.brighterplanet.com/rail_class_tractions) `electricity emission factor` (*kg CO<sub>2</sub>e / passenger-km*).
+                characteristics[:rail_class_traction].electricity_emission_factor
+                #FIXME TODO add relevant data to earth
+                #FIXME TODO test this
+            end
+            
+            quorum 'from rail class', :needs => :rail_class,
+              :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
+                # Looks up the [rail class](http://data.brighterplanet.com/rail_classes) `electricity emission factor` (*kg CO<sub>2</sub>e / passenger-km*).
+                characteristics[:rail_class].electricity_emission_factor
+                #FIXME TODO add relevant data to earth
+                #FIXME TODO test this
+            end
+            
+            quorum 'from traction', :needs => :traction,
+              :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
+                # Looks up the [traction](http://data.brighterplanet.com/tractions) `electricity emission factor` (*kg CO<sub>2</sub>e / passenger-km*).
+                characteristics[:traction].electricity_emission_factor
+                #FIXME TODO add relevant data to earth
+                #FIXME TODO test this
+            end
+            
+            quorum 'from country', :needs => :country,
+              :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
+                # Looks up the [country](http://data.brighterplanet.com/countries) `electricity emission factor` (*kg CO<sub>2</sub>e / passenger-km*).
+                characteristics[:country].electricity_emission_factor
+                #FIXME TODO add relevant data to earth
+                #FIXME TODO test this
             end
           end
           
-          ### Distance calculation
-          # Returns the `distance` traveled (*km*).
           committee :distance do
-            #### Distance from distance estimate
             quorum 'from distance estimate', :needs => :distance_estimate,
-              # **Complies:** GHG Protocol Scope 3, ISO-140641, Climate Registry Protocol
               :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
                 # Uses the `distance estimate` (*km*).
                 characteristics[:distance_estimate]
             end
             
-            #### Distance from duration and speed
+            quorum 'from route', :needs => :route,
+              :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
+                # Calculates the distance based on the `route` to give *km*.
+                #FIXME TODO calculate total distance from route
+                #FIXME TODO test this
+            end
+            
             quorum 'from duration and speed', :needs => [:duration, :speed],
-              # **Complies:** GHG Protocol Scope 3, ISO-140641, Climate Registry Protocol
               :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
                 # Multiplies the `duration` (*hours*) by the `speed` (*km / hour*) to give *km*.
                 characteristics[:duration] * characteristics[:speed]
             end
             
-            #### Distance from rail class
-            quorum 'from rail class', :needs => :rail_class do |characteristics|
-              # Looks up the [rail class](http://data.brighterplanet.com/rail_classes) `distance`.
-              characteristics[:rail_class].distance
+            #FIXME NOTE: keeping this b/c it's where the US data will be; we could add more quorums but don't think it's worth it now
+            quorum 'from country and rail class', :needs => [:country, :rail_class],
+              :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
+                # Looks up the [country rail class](http://data.brighterplanet.com/country_rail_classes) average trip `distance`.
+                characteristics[:country_rail_classes].distance
+                #FIXME TODO add relevant data to earth
+                #FIXME TODO test this
+            end
+            
+            quorum 'from country', :needs => :country,
+              :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
+                # Looks up the [country](http://data.brighterplanet.com/countries) average trip `distance` (*km*).
+                characteristics[:country].rail_trip_distance
+                #FIXME TODO add relevant data to earth, esp. fallback
+                #FIXME TODO test this
             end
           end
           
           ### Distance estimate calculation
-          # Returns the trip's `distance estimate` (*km*)
-            #### Distance estimate from client input
-            # **Complies:** All
-            #
-            # Uses the client-input `distance estimate` (*km*).
+          # Returns the client-input `distance estimate` (*km*)
+          
+          committee :route do
+            quorum 'from origin and destination', :needs => [:origin, :destination],
+              :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
+                #FIXME TODO get the route via road from mapquest
+            end
+          end
+          
+          ### Destination calculation
+          # Returns the client-input `destination`.
+          # FIXME TODO we might want to check here that this is a location Mapquest recognizes
+          
+          ### Origin calculation
+          # Returns the client-input `origin`.
+          # FIXME TODO we might want to check here that this is a location Mapquest recognizes
           
           ### Duration calculation
-          # Returns the trip's `duration` (*hours*).
-            #### Duration from client input
+          # Returns the client-input `duration` (*hours*).
+          
+          committee :speed do
+            #FIXME NOTE: keeping this b/c it's where the US data will be; we could add more quorums but don't think it's worth it now
+            quorum 'from country and rail class', :needs => [:country, :rail_class],
+              :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
+                # Looks up the [country rail class](http://data.brighterplanet.com/country_rail_classes) average `speed`.
+                characteristics[:country_rail_class].speed
+                #FIXME TODO add relevant data to earth
+                #FIXME TODO test this
+            end
+            
+            quorum 'from country', :needs => :country,
+              :complies => [:ghg_protocol_scope_3, :iso, :tcr] do
+                # Looks up the [country](http://data.brighterplanet.com/countries) average `speed`.
+                characteristics[:country].speed
+                #FIXME TODO add relevant data to earth
+                #FIXME TODO test this
+            end
+          end
+          
+          committee :country_rail_class_traction do
+            quorum 'from country, rail class, and traction', :needs => [:country, :rail_class, :traction],
+              :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
+                CountryRailClassTraction.find_by_country_iso_3166_code_and_rail_class_name_and_traction_name(
+                  characteristics[:country].iso_3166_code,
+                  characteristics[:rail_class].name,
+                  characteristics[:traction].name,
+                )
+            end
+          end
+          
+          committee :country_rail_class do
+            quorum 'from country and rail class', :needs => [:country, :rail_class],
+              :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
+                CountryRailClass.find_by_country_iso_3166_code_and_rail_class_name(
+                  characteristics[:country].iso_3166_code,
+                  characteristics[:rail_class].name,
+                )
+            end
+          end
+          
+          committee :country_traction do
+            quorum 'from country and traction', :needs => [:country, :traction],
+              :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
+                CountryTraction.find_by_country_iso_3166_code_and_traction_name(
+                  characteristics[:country].iso_3166_code,
+                  characteristics[:traction].name,
+                )
+            end
+          end
+          
+          committee :rail_class_traction do
+            quorum 'from rail class and traction', :needs => [:rail_class, :traction],
+              :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
+                RailClassTraction.find_by_rail_class_name_and_traction_name(
+                  characteristics[:rail_class].name,
+                  characteristics[:traction].name,
+                )
+            end
+          end
+          
+          committee :country do
+            #### Country from client input
             # **Complies:** All
             #
-            # Uses the client-input `duration` (*hours*).
-          
-          ### Diesel intensity calculation
-          # Returns the `diesel intensity` (*l / km*).
-          committee :diesel_intensity do
-            #### Diesel intensity from rail class
-            quorum 'from rail class', :needs => :rail_class,
-              # **Complies:** GHG Protocol Scope 3, ISO-140641, Climate Registry Protocol
-              :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
-                # Looks up the [rail class](http://data.brighterplanet.com/rail_classes) `diesel intensity`.
-                characteristics[:rail_class].diesel_intensity
-            end
-          end
-          
-          ### Electricity intensity calculation
-          # Returns the `electricity intensity` (*kWh / km*).
-          committee :electricity_intensity do
-            #### Electricity intensity from rail class
-            quorum 'from rail class', :needs => :rail_class,
-              # **Complies:** GHG Protocol Scope 3, ISO-140641, Climate Registry Protocol
-              :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
-                # Looks up the [rail class](http://data.brighterplanet.com/rail_classes) `electricity intensity`.
-                characteristics[:rail_class].electricity_intensity
-            end
-          end
-          
-          ### Speed calculation
-          # Returns the average `speed` (*km / hour*).
-          committee :speed do
-            #### Speed from rail class
-            quorum 'from rail class', :needs => :rail_class, 
-              # **Complies:** GHG Protocol Scope 3, ISO-140641, Climate Registry Protocol
-              :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
-                # Looks up the [rail class](http://data.brighterplanet.com/rail_classes) `speed`.
-                characteristics[:rail_class].speed
-            end
-          end
-          
-          ### Passengers calculation
-          # Returns the total number of `passengers`.
-          committee :passengers do
-            #### Passengers from rail class
-            quorum 'from rail class', :needs => :rail_class,
-              # **Complies:** GHG Protocol Scope 3, ISO-140641, Climate Registry Protocol
-              :complies => [:ghg_protocol_scope_3, :iso, :tcr]  do |characteristics|
-                # Looks up the [rail class](http://data.brighterplanet.com/rail_classes) `passengers`.
-                characteristics[:rail_class].passengers
+            # Uses the client-input [country](http://data.brighterplanet.com/countries).
+            
+            #FIXME NOTE: this is really just for the fallback - in most cases we should have a route
+            quorum 'default',
+              :complies => [:ghg_protocol_scope_3, :iso, :tcr] do
+                # Uses an artificial [country](http://data.brighterplanet.com/countries) representing global averages.
+                Country.fallback
+                #FIXME TODO add relevant data to earth
+                #FIXME TODO test this
             end
           end
           
           ### Rail class calculation
-          # Returns the [rail class](http://data.brighterplanet.com/rail_classes). This is the type of rail the trip used.
-          committee :rail_class do
-            #### Rail class from client input
-            # **Complies:** All
-            #
-            # Uses the client-input [rail class](http://data.brighterplanet.com/rail_classes).
-            
-            #### Default rail class
-            quorum 'default', 
-              # **Complies:** GHG Protocol Scope 3, ISO 14064-1, Climate Registry Protocol
-              :complies => [:ghg_protocol_scope_3, :iso, :tcr] do
-                # Uses an artificial [rail class](http://data.brighterplanet.com/rail_classes) representing the U.S. average.
-                RailClass.find_by_name "US average"
-            end
-          end
+          # Returns the client-input [rail class](http://data.brighterplanet.com/rail_classes).
           
-          ### Date calculation
-          # Returns the `date` on which the trip occurred.
-          committee :date do
-            #### Date from client input
-            # **Complies:** All
-            #
-            # Uses the client-input `date`.
+          ### Traction calculation
+          # Returns the client-input [traction](http://data.brighterplanet.com/rail_tractions).
+          
+          committee :verified_date do
+            quorum 'from date', :needs => :date
+              :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
+                # Parses the user-entered date to ensure it is valid.
+                characteristics[:date].is_a?(Date) ? characteristics[:date] : Date.parse(characteristics[:date].to_s)
+            end
             
-            #### Date from timeframe
             quorum 'from timeframe',
-              # **Complies:** GHG Protocol Scope 3, ISO-14064-1, Climate Registry Protocol
               :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics, timeframe|
                 # Assumes the trip occurred on the first day of the `timeframe`.
                 timeframe.from
             end
           end
+          
+          ### Date calculation
+          # Returns the client-input date
           
           ### Timeframe calculation
           # Returns the `timeframe`.

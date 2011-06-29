@@ -16,10 +16,14 @@ module BrighterPlanet
     module Data
       def self.included(base)
         base.create_table do
-          string  'rail_class_name'
-          float   'duration'
-          float   'distance_estimate'
-          date    'date'
+          date   'date'
+          string 'country_iso_3166_code'
+          string 'origin'
+          string 'destination'
+          string 'rail_class_name'
+          string 'traction_name'
+          float  'distance_estimate'
+          float  'duration'
         end
       end
     end
