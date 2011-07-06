@@ -115,8 +115,8 @@ module BrighterPlanet
             quorum 'from duration and speed', :needs => [:duration, :speed],
               # **Complies:** GHG Protocol Scope 3, ISO-140641, Climate Registry Protocol
               :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
-                # Multiplies the `duration` (*hours*) by the `speed` (*km / hour*) to give *km*.
-                characteristics[:duration] * characteristics[:speed]
+                # Multiplies the `duration` (*seconds*) (converted to hours) by the `speed` (*km / hour*) to give *km*.
+                characteristics[:duration] / 3600.0 * characteristics[:speed]
             end
             
             #### Distance from rail class
@@ -134,11 +134,11 @@ module BrighterPlanet
             # Uses the client-input `distance estimate` (*km*).
           
           ### Duration calculation
-          # Returns the trip's `duration` (*hours*).
+          # Returns the trip's `duration` (*seconds*).
             #### Duration from client input
             # **Complies:** All
             #
-            # Uses the client-input `duration` (*hours*).
+            # Uses the client-input `duration` (*seconds*).
           
           ### Diesel intensity calculation
           # Returns the `diesel intensity` (*l / km*).

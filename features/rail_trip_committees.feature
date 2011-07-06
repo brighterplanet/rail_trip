@@ -45,7 +45,7 @@ Feature: Rail Trip Committee Calculations
 
   Scenario: Distance committee from duration and speed
     Given a rail trip emitter
-    And a characteristic "duration" of "2"
+    And a characteristic "duration" of "7200"
     And a characteristic "speed" of "50"
     When the "distance" committee is calculated
     Then the committee should have used quorum "from duration and speed"

@@ -23,7 +23,7 @@ Feature: Rail Trip Emissions Calculations
     Then the emission value should be within "0.01" kgs of "10.97"
 
   Scenario: Calculations for rail trip from duration
-    Given a rail trip has "duration" of "2"
+    Given a rail trip has "duration" of "7200"
     When emissions are calculated
     Then the emission value should be within "0.01" kgs of "7.89"
 

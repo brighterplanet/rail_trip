@@ -21,7 +21,7 @@ module BrighterPlanet
         # terminology and inflection preference.
         base.summarize do |has|
           has.adjective lambda { |rail_trip| "#{rail_trip.distance.convert(:kilometres, :miles).round(1)}-mile" }, :if => :distance
-          has.adjective lambda { |rail_trip| "#{rail_trip.duration}-hour" }, :if => :duration
+          has.adjective lambda { |rail_trip| "#{rail_trip.duration.convert(:seconds, :hours)}-hour" }, :if => :duration
           has.identity 'rail trip'
           has.verb :take
           has.aspect :perfect

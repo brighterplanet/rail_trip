@@ -23,8 +23,8 @@ module BrighterPlanet
         # listed here define the standard public API to RailTrip.
         base.characterize do
           has :rail_class
-          has :duration#, :measures => :time
-          has :distance_estimate, :measures => :length
+          has :duration, :measures => :time
+          has :distance_estimate, :measures => Measurement::BigLength
           has :date
         end
         
