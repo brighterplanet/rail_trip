@@ -68,7 +68,7 @@ Contact Brighter Planet for dual-license arrangements.</p>
 
 <h4>Collaboration</h4>
 
-<p>Contributions to this carbon model are actively encouraged and warmly welcomed. This library includes a comprehensive test suite to ensure that your changes do not cause regressions. All changes should include test coverage for new functionality. Please see <a href="http://github.com/brighterplanet/sniff#readme">sniff</a>, our emitter testing framework, for more information.</p>
+<p>Contributions to this carbon model are actively encouraged and warmly welcomed. This library includes a comprehensive test suite to ensure that your changes do not cause regressions. All changes should include test coverage for new functionality. Please see <a href="https://github.com/brighterplanet/sniff#readme">sniff</a>, our emitter testing framework, for more information.</p>
       </td>
       <td class=code>
         <div class='highlight'><pre><span class="k">module</span> <span class="nn">BrighterPlanet</span>
@@ -452,10 +452,10 @@ Contact Brighter Planet for dual-license arrangements.</p>
         <div class="pilwrap">
           <a class="pilcrow" href="#section-33">&#182;</a>
         </div>
-        <p>Multiplies the <code>duration</code> (<em>hours</em>) by the <code>speed</code> (<em>km / hour</em>) to give <em>km</em>.</p>
+        <p>Multiplies the <code>duration</code> (<em>seconds</em>) (converted to hours) by the <code>speed</code> (<em>km / hour</em>) to give <em>km</em>.</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre>                <span class="n">characteristics</span><span class="o">[</span><span class="ss">:duration</span><span class="o">]</span> <span class="o">*</span> <span class="n">characteristics</span><span class="o">[</span><span class="ss">:speed</span><span class="o">]</span>
+        <div class='highlight'><pre>                <span class="n">characteristics</span><span class="o">[</span><span class="ss">:duration</span><span class="o">]</span> <span class="o">/</span> <span class="mi">3600</span><span class="o">.</span><span class="mi">0</span> <span class="o">*</span> <span class="n">characteristics</span><span class="o">[</span><span class="ss">:speed</span><span class="o">]</span>
             <span class="k">end</span>
             </pre></div>
       </td>
@@ -511,13 +511,13 @@ Contact Brighter Planet for dual-license arrangements.</p>
         </div>
         <h2>Duration calculation</h2>
 
-<p>Returns the trip&rsquo;s <code>duration</code> (<em>hours</em>).</p>
+<p>Returns the trip&rsquo;s <code>duration</code> (<em>seconds</em>).</p>
 
 <h3>Duration from client input</h3>
 
 <p><strong>Complies:</strong> All</p>
 
-<p>Uses the client-input <code>duration</code> (<em>hours</em>).</p>
+<p>Uses the client-input <code>duration</code> (<em>seconds</em>).</p>
       </td>
       <td class=code>
         <div class='highlight'><pre>          </pre></div>
