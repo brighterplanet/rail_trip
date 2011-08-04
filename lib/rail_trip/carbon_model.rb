@@ -96,7 +96,7 @@ module BrighterPlanet
           end
           
           committee :diesel_emission_factor do
-            quorum 'from country, rail class, and traction', :needs => [:country_rail_class_traction]
+            quorum 'from country, rail class, and traction', :needs => [:country_rail_class_traction],
               :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
                 # Looks up the [country rail class traction](http://data.brighterplanet.com/country_rail_class_tractions) `diesel emission factor` (*kg CO<sub>2</sub>e / passenger-km*).
                 characteristics[:country_rail_class_traction].diesel_emission_factor
@@ -104,7 +104,7 @@ module BrighterPlanet
                 #FIXME TODO test this
             end
             
-            quorum 'from country and rail class', :needs => [:country_rail_class]
+            quorum 'from country and rail class', :needs => [:country_rail_class],
               :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
                 # Looks up the [country rail class](http://data.brighterplanet.com/country_rail_classes) `diesel emission factor` (*kg CO<sub>2</sub>e / passenger-km*).
                 characteristics[:country_rail_class].diesel_emission_factor
@@ -112,7 +112,7 @@ module BrighterPlanet
                 #FIXME TODO test this
             end
             
-            quorum 'from country and traction', :needs => [:country_traction]
+            quorum 'from country and traction', :needs => [:country_traction],
               :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
                 # Looks up the [country traction](http://data.brighterplanet.com/country_tractions) `diesel emission factor` (*kg CO<sub>2</sub>e / passenger-km*).
                 characteristics[:country_traction].diesel_emission_factor
@@ -120,7 +120,7 @@ module BrighterPlanet
                 #FIXME TODO test this
             end
             
-            quorum 'from rail class and traction', :needs => [:rail_class, :traction]
+            quorum 'from rail class and traction', :needs => [:rail_class, :traction],
               :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
                 # Looks up the [rail class traction](http://data.brighterplanet.com/rail_class_tractions) `diesel emission factor` (*kg CO<sub>2</sub>e / passenger-km*).
                 characteristics[:rail_class_traction].diesel_emission_factor
@@ -154,7 +154,7 @@ module BrighterPlanet
           end
           
           committee :electricity_emission_factor do
-            quorum 'from country, rail class, and traction', :needs => [:country_rail_class_traction]
+            quorum 'from country, rail class, and traction', :needs => [:country_rail_class_traction],
               :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
                 # Looks up the [country rail class traction](http://data.brighterplanet.com/country_rail_class_tractions) `electricity emission factor` (*kg CO<sub>2</sub>e / passenger-km*).
                 characteristics[:country_rail_class_traction].electricity_emission_factor
@@ -162,7 +162,7 @@ module BrighterPlanet
                 #FIXME TODO test this
             end
             
-            quorum 'from country and rail class', :needs => [:country_rail_class]
+            quorum 'from country and rail class', :needs => [:country_rail_class],
               :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
                 # Looks up the [country rail class](http://data.brighterplanet.com/country_rail_classes) `electricity emission factor` (*kg CO<sub>2</sub>e / passenger-km*).
                 characteristics[:country_rail_class].electricity_emission_factor
@@ -170,7 +170,7 @@ module BrighterPlanet
                 #FIXME TODO test this
             end
             
-            quorum 'from country and traction', :needs => [:country_traction]
+            quorum 'from country and traction', :needs => [:country_traction],
               :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
                 # Looks up the [country traction](http://data.brighterplanet.com/country_tractions) `electricity emission factor` (*kg CO<sub>2</sub>e / passenger-km*).
                 characteristics[:country_traction].electricity_emission_factor
@@ -178,7 +178,7 @@ module BrighterPlanet
                 #FIXME TODO test this
             end
             
-            quorum 'from rail class and traction', :needs => [:rail_class, :traction]
+            quorum 'from rail class and traction', :needs => [:rail_class, :traction],
               :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
                 # Looks up the [rail class traction](http://data.brighterplanet.com/rail_class_tractions) `electricity emission factor` (*kg CO<sub>2</sub>e / passenger-km*).
                 characteristics[:rail_class_traction].electricity_emission_factor
@@ -353,7 +353,7 @@ module BrighterPlanet
           # Returns the client-input [traction](http://data.brighterplanet.com/rail_tractions).
           
           committee :verified_date do
-            quorum 'from date', :needs => :date
+            quorum 'from date', :needs => :date,
               :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
                 # Parses the user-entered date to ensure it is valid.
                 characteristics[:date].is_a?(Date) ? characteristics[:date] : Date.parse(characteristics[:date].to_s)
