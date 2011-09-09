@@ -20,6 +20,7 @@ module BrighterPlanet
           string 'country_iso_3166_code'
           string 'origin'
           string 'destination'
+          string 'rail_company_name'
           string 'rail_class_name'
           string 'traction_name'
           float  'distance_estimate'

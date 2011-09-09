@@ -23,13 +23,14 @@ module BrighterPlanet
         # listed here define the standard public API to RailTrip.
         base.characterize do
           has :date
-          has :country
+          has :country      # to support US data
           has :origin
           has :destination
-          has :rail_class  # e.g. highspeed, intercity, regional
-          has :traction    # electric or diesel
+          has :rail_company # e.g. SNCF
+          has :rail_class   # e.g. highspeed, intercity, regional
+          has :traction     # electric or diesel
           has :distance_estimate, :measures => :length
-          has :duration#, :measures => :time
+          has :duration,          :measures => :time
         end
         
         # Additional characteristics are gleaned from the carbon model.
