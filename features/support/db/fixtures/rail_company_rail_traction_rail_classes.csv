@@ -1,0 +1,3 @@
+name,rail_company_name,rail_traction_name,rail_class_name,electricity_intensity,diesel_intensity,electricity_variant_name,diesel_variant_name
+Amtrak diesel intercity,Amtrak,diesel,intercity,0,20.0,,Distillate Fuel Oil No. 2 Amtrak diesel intercity
+SNCF electric highspeed,SNCF,electric,highspeed,20.0,0,Electricity SNCF electric highspeed

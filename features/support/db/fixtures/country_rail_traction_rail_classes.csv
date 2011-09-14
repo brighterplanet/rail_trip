@@ -1,0 +1,3 @@
+name,country_iso_3166_code,rail_traction_name,rail_class_name,speed,electricity_intensity,diesel_intensity,electricity_variant_name,diesel_variant_name
+US diesel intercity,US,diesel,intercity,60.0,0,20.0,,Distillate Fuel Oil No. 2 US diesel intercity rail
+FR electric highspeed,FR,electric,highspeed,250.0,20.0,0,Electricity FR electric highspeed rail
