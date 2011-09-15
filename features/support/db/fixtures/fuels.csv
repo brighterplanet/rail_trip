@@ -1,22 +1,2 @@
-name,fuel_name,country_iso_3166_code,rail_company_name,rail_traction_name,rail_class_name,co2_emission_factor,co2_biogenic_emission_factor,ch4_emission_factor,n2o_emission_factor
-Electricity,Electricity,,,,,0.5,0.1,0.4,0.6
-Distillate Fuel Oil No. 2,Distillate Fuel Oil No. 2,,,,,2.8,0,2.7,2.9
-Electricity US,Electricity,US,,,,0.6,0.1,0.5,0.7
-Electricity FR,Electricity,FR,,,,0.4,0.1,0.3,0.5
-Distillate Fuel Oil No. 2 US,Distillate Fuel Oil No. 2,US,,,,2.7,0,2.6,2.8
-Distillate Fuel Oil No. 2 FR,Distillate Fuel Oil No. 2,FR,,,,2.9,0,2.8,3
-Electricity FR electric rail,Electricity,FR,,electric,,0.3,0.1,0.2,0.4
-Distillate Fuel Oil No. 2 US diesel rail,Distillate Fuel Oil No. 2,US,,diesel,,2.6,0,2.5,2.7
-Electricity FR highspeed rail,Electricity,FR,,,highspeed,0.2,0.1,0.1,0.3
-Electricity US intercity rail,Electricity,US,,,intercity,0.5,0.1,0.4,0.6
-Distillate Fuel Oil No. 2 US intercity rail,Distillate Fuel Oil No. 2,US,,,intercity,2.5,0,2.4,2.6
-Electricity FR electric highspeed rail,Electricity,FR,,electric,highspeed,0.2,0.1,0.1,0.3
-Distillate Fuel Oil No. 2 US diesel intercity rail,Distillate Fuel Oil No. 2,US,,diesel,intercity,2.5,0,2.4,2.6
-Electricity Amtrak,Electricity,,Amtrak,,,0.5,0.1,0.4,0.6
-Electricity SNCF,Electricity,,SNCF,,,0.3,0.1,0.2,0.4
-Distillate Fuel Oil No. 2 Amtrak,Distillate Fuel Oil No. 2,,Amtrak,,,2.5,0,2.4,2.6
-Distillate Fuel Oil No. 2 SNCF,Distillate Fuel Oil No. 2,,SNCF,,,2.9,0,2.8,3
-Electricity SNCF electric,Electricity,,SNCF,electric,,0.3,0.1,0.2,0.4
-Distillate Fuel Oil No. 2 Amtrak diesel,Distillate Fuel Oil No. 2,,Amtrak,diesel,,2.5,0,2.4,2.6
-Electricity SNCF electric highspeed,Electricity,,SNCF,electric,highspeed,0.3,0.1,0.2,0.4
-Distillate Fuel Oil No. 2 Amtrak diesel intercity,Distillate Fuel Oil No. 2,,Amtrak,diesel,intercity,2.5,0,2.4,2.6
+name,co2_emission_factor,co2_biogenic_emission_factor
+Distillate Fuel Oil No. 2,3.0,0

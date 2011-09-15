@@ -1,3 +1,4 @@
-iso_3166_code,name,rail_trip_speed,rail_trip_distance,rail_electricity_intensity,rail_diesel_intensity,electricity_variant_name,diesel_variant_name
-US,UNITED STATES,50.0,15.0,1.0,5.0,Electricity US,Distillate Fuel Oil No. 2 US
-FR,FRANCE,100.0,50.0,5.0,1.0,Electricity FR,Distillate Fuel Oil No. 2 FR
+iso_3166_code,name,rail_trip_speed,rail_trip_distance,rail_trip_electricity_intensity,rail_trip_diesel_intensity,rail_trip_emission_factor
+US,UNITED STATES,50.0,15.0,1.0,5.0,16.0
+FR,FRANCE,100.0,50.0,5.0,1.0,8.0
+UK,UNITED KINGDOM

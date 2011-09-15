@@ -17,7 +17,6 @@ module BrighterPlanet
       def self.included(base)
         base.force_schema do
           date   'date'
-          string 'zip_code_name'
           string 'country_iso_3166_code'
           string 'origin'
           string 'destination'
