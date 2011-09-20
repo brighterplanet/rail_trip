@@ -1,3 +1,4 @@
 name,country_iso_3166_code,electricity_intensity,diesel_intensity,emission_factor
 Amtrak,US,2.0,4.0,14.0
+Eurostar,,4.0,2.0,10.0
 SNCF,FR,4.0,2.0,10.0
