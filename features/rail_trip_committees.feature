@@ -121,7 +121,7 @@ Feature: Rail Trip Committee Calculations
     And a characteristic "country.iso_3166_code" of "<country>"
     And a characteristic "rail_traction.name" of "<traction>"
     And a characteristic "rail_class.name" of "<class>"
-    When the "country_rail_traction_rail_class" committee is calculated
+    When the "country_rail_traction_class" committee is calculated
     Then the committee should have used quorum "from country, rail traction, and rail class"
     And the conclusion of the committee should have "name" of "<country_traction_class>"
     Examples:
@@ -133,7 +133,7 @@ Feature: Rail Trip Committee Calculations
     Given a rail trip emitter
     And a characteristic "rail_company.name" of "<company>"
     And a characteristic "rail_traction.name" of "<traction>"
-    When the "rail_company_rail_traction" committee is calculated
+    When the "rail_company_traction" committee is calculated
     Then the committee should have used quorum "from rail company and rail traction"
     And the conclusion of the committee should have "name" of "<company_traction>"
     Examples:
@@ -146,7 +146,7 @@ Feature: Rail Trip Committee Calculations
     And a characteristic "rail_company.name" of "<company>"
     And a characteristic "rail_traction.name" of "<traction>"
     And a characteristic "rail_class.name" of "<class>"
-    When the "rail_company_rail_traction_rail_class" committee is calculated
+    When the "rail_company_traction_class" committee is calculated
     Then the committee should have used quorum "from rail company, rail traction, and rail class"
     And the conclusion of the committee should have "name" of "<company_traction_class>"
     Examples:
@@ -317,7 +317,7 @@ Feature: Rail Trip Committee Calculations
     And a characteristic "country.iso_3166_code" of "<country>"
     And a characteristic "rail_traction.name" of "<traction>"
     And a characteristic "rail_class.name" of "<class>"
-    When the "country_rail_traction_rail_class" committee is calculated
+    When the "country_rail_traction_class" committee is calculated
     And the "electricity_intensity" committee is calculated
     Then the committee should have used quorum "from country rail traction rail class"
     And the conclusion of the committee should be "<electricity>"
@@ -330,7 +330,7 @@ Feature: Rail Trip Committee Calculations
     Given a rail trip emitter
     And a characteristic "rail_company.name" of "<company>"
     And a characteristic "rail_traction.name" of "<traction>"
-    When the "rail_company_rail_traction" committee is calculated
+    When the "rail_company_traction" committee is calculated
     And the "electricity_intensity" committee is calculated
     Then the committee should have used quorum "from rail company rail traction"
     And the conclusion of the committee should be "<electricity>"
@@ -344,7 +344,7 @@ Feature: Rail Trip Committee Calculations
     And a characteristic "rail_company.name" of "<company>"
     And a characteristic "rail_traction.name" of "<traction>"
     And a characteristic "rail_class.name" of "<class>"
-    When the "rail_company_rail_traction_rail_class" committee is calculated
+    When the "rail_company_traction_class" committee is calculated
     And the "electricity_intensity" committee is calculated
     Then the committee should have used quorum "from rail company rail traction rail class"
     And the conclusion of the committee should be "<electricity>"
@@ -417,7 +417,7 @@ Feature: Rail Trip Committee Calculations
     And a characteristic "country.iso_3166_code" of "<country>"
     And a characteristic "rail_traction.name" of "<traction>"
     And a characteristic "rail_class.name" of "<class>"
-    When the "country_rail_traction_rail_class" committee is calculated
+    When the "country_rail_traction_class" committee is calculated
     And the "diesel_intensity" committee is calculated
     Then the committee should have used quorum "from country rail traction rail class"
     And the conclusion of the committee should be "<diesel>"
@@ -430,7 +430,7 @@ Feature: Rail Trip Committee Calculations
     Given a rail trip emitter
     And a characteristic "rail_company.name" of "<company>"
     And a characteristic "rail_traction.name" of "<traction>"
-    When the "rail_company_rail_traction" committee is calculated
+    When the "rail_company_traction" committee is calculated
     And the "diesel_intensity" committee is calculated
     Then the committee should have used quorum "from rail company rail traction"
     And the conclusion of the committee should be "<diesel>"
@@ -444,7 +444,7 @@ Feature: Rail Trip Committee Calculations
     And a characteristic "rail_company.name" of "<company>"
     And a characteristic "rail_traction.name" of "<traction>"
     And a characteristic "rail_class.name" of "<class>"
-    When the "rail_company_rail_traction_rail_class" committee is calculated
+    When the "rail_company_traction_class" committee is calculated
     And the "diesel_intensity" committee is calculated
     Then the committee should have used quorum "from rail company rail traction rail class"
     And the conclusion of the committee should be "<diesel>"
@@ -524,7 +524,7 @@ Feature: Rail Trip Committee Calculations
     And a characteristic "country.iso_3166_code" of "<country>"
     And a characteristic "rail_traction.name" of "<traction>"
     And a characteristic "rail_class.name" of "<class>"
-    When the "country_rail_traction_rail_class" committee is calculated
+    When the "country_rail_traction_class" committee is calculated
     And the "emission_factor" committee is calculated
     Then the committee should have used quorum "from country rail traction rail class"
     And the conclusion of the committee should be "<ef>"
@@ -537,7 +537,7 @@ Feature: Rail Trip Committee Calculations
     Given a rail trip emitter
     And a characteristic "rail_company.name" of "<company>"
     And a characteristic "rail_traction.name" of "<traction>"
-    When the "rail_company_rail_traction" committee is calculated
+    When the "rail_company_traction" committee is calculated
     And the "emission_factor" committee is calculated
     Then the committee should have used quorum "from rail company rail traction"
     And the conclusion of the committee should be "<ef>"
@@ -551,7 +551,7 @@ Feature: Rail Trip Committee Calculations
     And a characteristic "rail_company.name" of "<company>"
     And a characteristic "rail_traction.name" of "<traction>"
     And a characteristic "rail_class.name" of "<class>"
-    When the "rail_company_rail_traction_rail_class" committee is calculated
+    When the "rail_company_traction_class" committee is calculated
     And the "emission_factor" committee is calculated
     Then the committee should have used quorum "from rail company rail traction rail class"
     And the conclusion of the committee should be "<ef>"

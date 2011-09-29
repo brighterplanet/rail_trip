@@ -46,27 +46,27 @@ module BrighterPlanet
           # Returns the trip's `emission factor` (*kg CO<sub>2</sub>e / passenger-km*).
           committee :emission_factor do
             #### Emission factor from distance and rail company rail class rail traction
-            quorum 'from rail company rail traction rail class', :needs => :rail_company_rail_traction_rail_class,
+            quorum 'from rail company rail traction rail class', :needs => :rail_company_traction_class,
               # **Complies:** GHG Protocol Scope 3, ISO 14064-1, Climate Registry Protocol
               :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
-                # Looks up the [rail company rail traction rail class](http://data.brighterplanet.com/rail_company_rail_traction_rail_classes) emission factor (*kg CO<sub>2</sub>* / passenger-km).
-                characteristics[:rail_company_rail_traction_rail_class].emission_factor
+                # Looks up the [rail company rail traction rail class](http://data.brighterplanet.com/rail_company_traction_classes) emission factor (*kg CO<sub>2</sub>* / passenger-km).
+                characteristics[:rail_company_traction_class].emission_factor
             end
             
             #### Emission factor from rail company rail traction
-            quorum 'from rail company rail traction', :needs => :rail_company_rail_traction,
+            quorum 'from rail company rail traction', :needs => :rail_company_traction,
               # **Complies:** GHG Protocol Scope 3, ISO 14064-1, Climate Registry Protocol
               :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
-                # Looks up the [rail company rail traction](http://data.brighterplanet.com/rail_company_rail_tractions) emission factor (*kg CO<sub>2</sub>* / passenger-km).
-                characteristics[:rail_company_rail_traction].emission_factor
+                # Looks up the [rail company rail traction](http://data.brighterplanet.com/rail_company_tractions) emission factor (*kg CO<sub>2</sub>* / passenger-km).
+                characteristics[:rail_company_traction].emission_factor
             end
             
             #### Emission factor from country rail traction rail class
-            quorum 'from country rail traction rail class', :needs => :country_rail_traction_rail_class,
+            quorum 'from country rail traction rail class', :needs => :country_rail_traction_class,
               # **Complies:** GHG Protocol Scope 3, ISO 14064-1, Climate Registry Protocol
               :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
-                # Looks up the [country rail traction rail class](http://data.brighterplanet.com/country_rail_traction_rail_classes) emission factor (*kg CO<sub>2</sub>* / passenger-km).
-                characteristics[:country_rail_traction_rail_class].emission_factor
+                # Looks up the [country rail traction rail class](http://data.brighterplanet.com/country_rail_traction_classes) emission factor (*kg CO<sub>2</sub>* / passenger-km).
+                characteristics[:country_rail_traction_class].emission_factor
             end
             
             #### Emission factor from rail company
@@ -138,27 +138,27 @@ module BrighterPlanet
           # Returns the trip's `diesel intensity` (*l / passenger-km*).
           committee :diesel_intensity do
             #### Diesel intensity from rail company rail class rail traction
-            quorum 'from rail company rail traction rail class', :needs => :rail_company_rail_traction_rail_class,
+            quorum 'from rail company rail traction rail class', :needs => :rail_company_traction_class,
               # **Complies:** GHG Protocol Scope 3, ISO 14064-1, Climate Registry Protocol
               :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
                 # Looks up the `rail company rail traction rail class` diesel intensity (*kWh / passenger-km*).
-                characteristics[:rail_company_rail_traction_rail_class].diesel_intensity
+                characteristics[:rail_company_traction_class].diesel_intensity
             end
             
             #### Diesel intensity from rail company rail traction
-            quorum 'from rail company rail traction', :needs => :rail_company_rail_traction,
+            quorum 'from rail company rail traction', :needs => :rail_company_traction,
               # **Complies:** GHG Protocol Scope 3, ISO 14064-1, Climate Registry Protocol
               :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
                 # Looks up the `rail company rail traction` diesel intensity (*kWh / passenger-km*).
-                characteristics[:rail_company_rail_traction].diesel_intensity
+                characteristics[:rail_company_traction].diesel_intensity
             end
             
             #### Diesel intensity from country rail traction rail class
-            quorum 'from country rail traction rail class', :needs => :country_rail_traction_rail_class,
+            quorum 'from country rail traction rail class', :needs => :country_rail_traction_class,
               # **Complies:** GHG Protocol Scope 3, ISO 14064-1, Climate Registry Protocol
               :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
                 # Looks up the `country rail traction rail class` diesel intensity (*kWh / passenger-km*).
-                characteristics[:country_rail_traction_rail_class].diesel_intensity
+                characteristics[:country_rail_traction_class].diesel_intensity
             end
             
             #### Diesel intensity from rail company
@@ -206,27 +206,27 @@ module BrighterPlanet
           # Returns the trip's `electricity intensity` (*kWh / passenger-km*).
           committee :electricity_intensity do
             #### Electricity intensity from rail company rail class rail traction
-            quorum 'from rail company rail traction rail class', :needs => :rail_company_rail_traction_rail_class,
+            quorum 'from rail company rail traction rail class', :needs => :rail_company_traction_class,
               # **Complies:** GHG Protocol Scope 3, ISO 14064-1, Climate Registry Protocol
               :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
                 # Looks up the `rail company rail traction rail class` electricity intensity (*kWh / passenger-km*).
-                characteristics[:rail_company_rail_traction_rail_class].electricity_intensity
+                characteristics[:rail_company_traction_class].electricity_intensity
             end
             
             #### Electricity intensity from rail company rail traction
-            quorum 'from rail company rail traction', :needs => :rail_company_rail_traction,
+            quorum 'from rail company rail traction', :needs => :rail_company_traction,
               # **Complies:** GHG Protocol Scope 3, ISO 14064-1, Climate Registry Protocol
               :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
                 # Looks up the `rail company rail traction` electricity intensity (*kWh / passenger-km*).
-                characteristics[:rail_company_rail_traction].electricity_intensity
+                characteristics[:rail_company_traction].electricity_intensity
             end
             
             #### Electricity intensity from country rail traction rail class
-            quorum 'from country rail traction rail class', :needs => :country_rail_traction_rail_class,
+            quorum 'from country rail traction rail class', :needs => :country_rail_traction_class,
               # **Complies:** GHG Protocol Scope 3, ISO 14064-1, Climate Registry Protocol
               :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
                 # Looks up the `country rail traction rail class` electricity intensity (*kWh / passenger-km*).
-                characteristics[:country_rail_traction_rail_class].electricity_intensity
+                characteristics[:country_rail_traction_class].electricity_intensity
             end
             
             #### Electricity intensity from rail company
@@ -353,13 +353,13 @@ module BrighterPlanet
           
           ### Rail company rail traction rail class calculation
           # Returns the `rail company rail traction rail class`. This is a rail company-specific rail traction type and rail class (e.g. Amtrak diesel intercity).
-          committee :rail_company_rail_traction_rail_class do
+          committee :rail_company_traction_class do
             #### Rail company rail traction rail class from rail company, rail traction, and rail class
             quorum 'from rail company, rail traction, and rail class', :needs => [:rail_company, :rail_traction, :rail_class],
               # **Complies:** GHG Protocol Scope 3, ISO 14064-1, Climate Registry Protocol
               :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
-                # Looks up the [rail company rail traction rail class](http://data.brighterplanet.com/rail_company_rail_traction_rail_classes) based on the `rail company` name, `rail traction` name, and `rail class` name.
-                RailCompanyRailTractionRailClass.find_by_rail_company_name_and_rail_traction_name_and_rail_class_name(
+                # Looks up the [rail company rail traction rail class](http://data.brighterplanet.com/rail_company_traction_classes) based on the `rail company` name, `rail traction` name, and `rail class` name.
+                RailCompanyTractionClass.find_by_rail_company_name_and_rail_traction_name_and_rail_class_name(
                   characteristics[:rail_company].name,
                   characteristics[:rail_traction].name,
                   characteristics[:rail_class].name
@@ -369,13 +369,13 @@ module BrighterPlanet
           
           ### Rail company rail traction calculation
           # Returns the `rail company rail traction`. This is a rail company-specific rail traction type (e.g. Amtrak diesel).
-          committee :rail_company_rail_traction do
+          committee :rail_company_traction do
             #### Rail company rail traction from rail company and rail traction
             quorum 'from rail company and rail traction', :needs => [:rail_company, :rail_traction],
               # **Complies:** GHG Protocol Scope 3, ISO 14064-1, Climate Registry Protocol
               :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
-                # Looks up the [rail company rail traction](http://data.brighterplanet.com/rail_company_rail_tractions) based on the `rail company` name and `rail traction` name.
-                RailCompanyRailTraction.find_by_rail_company_name_and_rail_traction_name(
+                # Looks up the [rail company rail traction](http://data.brighterplanet.com/rail_company_tractions) based on the `rail company` name and `rail traction` name.
+                RailCompanyTraction.find_by_rail_company_name_and_rail_traction_name(
                   characteristics[:rail_company].name,
                   characteristics[:rail_traction].name
                 )
@@ -384,13 +384,13 @@ module BrighterPlanet
           
           ### Country rail traction rail class calculation
           # Returns the `country rail traction rail class`. This is a country-specific rail traction type and rail class (e.g. US diesel intercity).
-          committee :country_rail_traction_rail_class do
+          committee :country_rail_traction_class do
             #### Country rail traction rail class from country, rail traction, and rail class
             quorum 'from country, rail traction, and rail class', :needs => [:country, :rail_traction, :rail_class],
               # **Complies:** GHG Protocol Scope 3, ISO 14064-1, Climate Registry Protocol
               :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
-                # Looks up the [country rail traction rail class](http://data.brighterplanet.com/country_rail_traction_rail_classes) based on the `country` ISO 3166 code, `rail traction` name, and `rail class` name.
-                CountryRailTractionRailClass.find_by_country_iso_3166_code_and_rail_traction_name_and_rail_class_name(
+                # Looks up the [country rail traction rail class](http://data.brighterplanet.com/country_rail_traction_classes) based on the `country` ISO 3166 code, `rail traction` name, and `rail class` name.
+                CountryRailTractionClass.find_by_country_iso_3166_code_and_rail_traction_name_and_rail_class_name(
                   characteristics[:country].iso_3166_code,
                   characteristics[:rail_traction].name,
                   characteristics[:rail_class].name
