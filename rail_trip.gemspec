@@ -25,7 +25,7 @@ Gem::Specification.new do |s|
   s.rdoc_options = ["--charset=UTF-8"]
   
   s.add_runtime_dependency 'emitter' unless ENV['LOCAL_EMITTER']
-  s.add_development_dependency 'sniff' unless ENV['LOCAL_SNIFF']
   s.add_runtime_dependency 'mapquest_directions'
   s.add_runtime_dependency 'geokit'
+  s.add_development_dependency 'sniff' unless ENV['LOCAL_SNIFF']
 end
