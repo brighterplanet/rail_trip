@@ -53,8 +53,8 @@ Feature: Rail Trip Emissions Calculations
 
   Scenario: Calculation for rail trip from undriveable locations
     Given a rail trip has "origin" of "37.8,-122.4"
-    And the geocoder will encode the origin as "origin" in "US"
-    And it has "destination" of "destination"
+    And the geocoder will encode the origin as "37.8,-122.4" in "US"
+    And it has "destination" of "48.9,2.4"
     And the geocoder will encode the destination as "48.9,2.4" in "FR"
     And mapquest determines the route to be undriveable
     When emissions are calculated
