@@ -79,7 +79,7 @@ Feature: Rail Trip Committee Calculations
       | origin            | origin_country | destination      | dest_country | country        |
       | San Francisco, CA | US             | Los Angeles, CA  | US           | UNITED STATES  |
       | Paris, France     | FR             | Grenoble, France | FR           | FRANCE         |
-      | London, UK        | UK             | Sheffield, UK    | UK           | UNITED KINGDOM |
+      | London, UK        | GB             | Sheffield, UK    | GB           | UNITED KINGDOM |
 
   Scenario: Country from origin and destination locations in different countries
     Given a rail trip emitter
