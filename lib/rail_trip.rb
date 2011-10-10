@@ -1,4 +1,5 @@
 require 'emitter'
+require 'mapquest_directions'
 
 module BrighterPlanet
   module RailTrip

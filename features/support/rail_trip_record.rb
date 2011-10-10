@@ -1,6 +1,6 @@
 require 'rail_trip'
 
 class RailTripRecord < ActiveRecord::Base
-  include Sniff::Emitter
+  include BrighterPlanet::Emitter
   include BrighterPlanet::RailTrip
 end

@@ -1,2 +1,2 @@
-name,co2_emission_factor,co2_emission_factor_units
-Distillate Fuel Oil No. 2,2.7,kilograms_per_litre
+name,co2_emission_factor,co2_biogenic_emission_factor
+Distillate Fuel Oil No. 2,3.0,0

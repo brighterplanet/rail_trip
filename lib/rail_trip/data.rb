@@ -15,12 +15,15 @@ module BrighterPlanet
     #
     module Data
       def self.included(base)
-        base.force_schema do
-          string  'rail_class_name'
-          float   'duration'
-          float   'distance_estimate'
-          date    'date'
-        end
+        base.col :date, :type => :date
+        base.col :country_iso_3166_code
+        base.col :origin
+        base.col :destination
+        base.col :rail_company_name
+        base.col :rail_class_name
+        base.col :rail_traction_name
+        base.col :distance, :type => :float
+        base.col :duration, :type => :float
       end
     end
   end
