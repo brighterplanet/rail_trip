@@ -1,3 +1,3 @@
-name,rail_company_name,rail_traction_name,electricity_intensity,diesel_intensity,emission_factor
+name,rail_company_name,rail_traction_name,electricity_intensity,diesel_intensity,co2_emission_factor
 Amtrak diesel,Amtrak,diesel,0,15.0,45.0
 SNCF electric,SNCF,electric,15.0,0,15.0
