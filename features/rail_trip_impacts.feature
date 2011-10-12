@@ -2,10 +2,7 @@ Feature: Rail Trip Impacts Calculations
   The rail trip model should generate correct impacts calculations
 
   Background:
-    Given a rail_trip impact
-
-  Background:
-    Given a RailTrip
+    Given a rail_trip
 
   Scenario: Calculations for rail trip with nothing
     When impacts are calculated

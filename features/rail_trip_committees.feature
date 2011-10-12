@@ -2,10 +2,7 @@ Feature: Rail Trip Committee Calculations
   The rail trip model should generate correct committee calculations
 
   Background:
-    Given a rail_trip impact
-
-  Background:
-    Given a RailTrip
+    Given a rail_trip
 
   Scenario: Date committee from timeframe
     And a characteristic "timeframe" of "2010-07-12/2010-11-28"
