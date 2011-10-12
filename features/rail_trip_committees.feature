@@ -4,6 +4,9 @@ Feature: Rail Trip Committee Calculations
   Background:
     Given a rail_trip impact
 
+  Background:
+    Given a RailTrip
+
   Scenario: Date committee from timeframe
     And a characteristic "timeframe" of "2010-07-12/2010-11-28"
     When the "date" committee reports

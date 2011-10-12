@@ -4,6 +4,9 @@ Feature: Rail Trip Impacts Calculations
   Background:
     Given a rail_trip impact
 
+  Background:
+    Given a RailTrip
+
   Scenario: Calculations for rail trip with nothing
     When impacts are calculated
     Then the amount of "carbon" should be within "0.1" kgs of "405.3"
