@@ -29,7 +29,7 @@ module BrighterPlanet
           has :rail_company  # e.g. Amtrak
           has :rail_traction # electric or diesel
           has :rail_class    # e.g. intercity
-          has :distance, :measures => :length
+          has :distance, :measures => Measurement::BigLength
           has :duration, :measures => :time
         end
         
