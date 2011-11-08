@@ -6,13 +6,13 @@ Feature: Rail Trip Impacts Calculations
 
   Scenario: Calculations for rail trip with nothing
     When impacts are calculated
-    Then the amount of "carbon" should be within "0.1" kgs of "405.3"
+    Then the amount of "carbon" should be within "0.1" of "405.3"
 
   Scenario Outline: Calculations for rail trip from date and timeframe
     Given it has "date" of "<date>"
     And it has "timeframe" of "<timeframe>"
     When impacts are calculated
-    Then the amount of "carbon" should be within "0.1" kgs of "<emission>"
+    Then the amount of "carbon" should be within "0.1" of "<emission>"
     Examples:
       | date       | timeframe             | emission |
       | 2010-07-12 | 2010-07-01/2010-07-10 | 0.0      |
@@ -22,7 +22,7 @@ Feature: Rail Trip Impacts Calculations
   Scenario Outline: Calculation for rail trip from country
     Given it has "country.iso_3166_code" of "<country>"
     When impacts are calculated
-    Then the amount of "carbon" should be within "0.1" kgs of "<emission>"
+    Then the amount of "carbon" should be within "0.1" of "<emission>"
     Examples:
       | country | emission |
       | US      | 240.0    |
@@ -32,7 +32,7 @@ Feature: Rail Trip Impacts Calculations
   Scenario Outline: Calculation for rail trip from rail company
     Given it has "rail_company.name" of "<company>"
     When impacts are calculated
-    Then the amount of "carbon" should be within "0.1" kgs of "<emission>"
+    Then the amount of "carbon" should be within "0.1" of "<emission>"
     Examples:
       | company  | emission |
       | Amtrak   | 210.0    |
@@ -46,7 +46,7 @@ Feature: Rail Trip Impacts Calculations
     And the geocoder will encode the destination as "destination" in "<destination_country>"
     And mapquest determines the distance in miles to be "<distance>"
     When impacts are calculated
-    Then the amount of "carbon" should be within "0.1" kgs of "<emission>"
+    Then the amount of "carbon" should be within "0.1" of "<emission>"
     Examples:
       | origin      | origin_country | destination | destination_country | distance | emission | comment |
       | 37.8,-122.4 | US             | 34.1,-118.2 | US                  | 382.2    | 9841.5   | SF to LA |
@@ -60,23 +60,23 @@ Feature: Rail Trip Impacts Calculations
     And the geocoder will encode the destination as "48.9,2.4" in "FR"
     And mapquest determines the route to be undriveable
     When impacts are calculated
-    Then the amount of "carbon" should be within "0.1" kgs of "405.3"
+    Then the amount of "carbon" should be within "0.1" of "405.3"
 
   Scenario: Calculations for rail trip from duration
     Given it has "duration" of "10800"
     When impacts are calculated
-    Then the amount of "carbon" should be within "0.1" kgs of "2457.0"
+    Then the amount of "carbon" should be within "0.1" of "2457.0"
 
   Scenario: Calculations for rail trip from distance
     Given it has "distance" of "100.0"
     When impacts are calculated
-    Then the amount of "carbon" should be within "0.1" kgs of "840.0"
+    Then the amount of "carbon" should be within "0.1" of "840.0"
 
   Scenario Outline: Calculation for rail trip from country traction
     Given it has "country.iso_3166_code" of "<country>"
     And it has "rail_traction.name" of "<traction>"
     When impacts are calculated
-    Then the amount of "carbon" should be within "0.1" kgs of "<emission>"
+    Then the amount of "carbon" should be within "0.1" of "<emission>"
     Examples:
       | country | traction | emission |
       | US      | diesel   | 450.0    |
@@ -86,14 +86,14 @@ Feature: Rail Trip Impacts Calculations
     Given it has "country.iso_3166_code" of "US"
     And it has "rail_class.name" of "intercity"
     When impacts are calculated
-    Then the amount of "carbon" should be within "0.1" kgs of "3000.0"
+    Then the amount of "carbon" should be within "0.1" of "3000.0"
 
   Scenario Outline: Calculation for rail trip from country traction class
     Given it has "country.iso_3166_code" of "<country>"
     And it has "rail_traction.name" of "<traction>"
     And it has "rail_class.name" of "<class>"
     When impacts are calculated
-    Then the amount of "carbon" should be within "0.1" kgs of "<emission>"
+    Then the amount of "carbon" should be within "0.1" of "<emission>"
     Examples:
       | country | traction | class     | emission |
       | US      | diesel   | intercity | 9000.0   |
@@ -103,7 +103,7 @@ Feature: Rail Trip Impacts Calculations
     Given it has "rail_company.name" of "<company>"
     And it has "rail_traction.name" of "<traction>"
     When impacts are calculated
-    Then the amount of "carbon" should be within "0.1" kgs of "<emission>"
+    Then the amount of "carbon" should be within "0.1" of "<emission>"
     Examples:
       | company | traction | emission |
       | Amtrak  | diesel   | 675.0    |
@@ -114,7 +114,7 @@ Feature: Rail Trip Impacts Calculations
     And it has "rail_traction.name" of "<traction>"
     And it has "rail_class.name" of "<class>"
     When impacts are calculated
-    Then the amount of "carbon" should be within "0.1" kgs of "<emission>"
+    Then the amount of "carbon" should be within "0.1" of "<emission>"
     Examples:
       | company | traction | class     | emission |
       | Amtrak  | diesel   | intercity | 9000.0   |
@@ -128,7 +128,7 @@ Feature: Rail Trip Impacts Calculations
     And the geocoder will encode the destination as "destination" in "FR"
     And mapquest determines the distance in miles to be "278.8"
     When impacts are calculated
-    Then the amount of "carbon" should be within "0.1" kgs of "4486.9"
+    Then the amount of "carbon" should be within "0.1" of "4486.9"
 
   Scenario: Calculation for rail trip from locations and country class
     Given it has "country.iso_3166_code" of "US"
@@ -139,7 +139,7 @@ Feature: Rail Trip Impacts Calculations
     And the geocoder will encode the destination as "destination" in "US"
     And mapquest determines the distance in miles to be "382.2"
     When impacts are calculated
-    Then the amount of "carbon" should be within "0.1" kgs of "12301.8"
+    Then the amount of "carbon" should be within "0.1" of "12301.8"
 
   Scenario: Calculation for rail trip from locations and company traction class
     Given it has "rail_company.name" of "SNCF"
@@ -151,4 +151,4 @@ Feature: Rail Trip Impacts Calculations
     And the geocoder will encode the destination as "destination" in "FR"
     And mapquest determines the distance in miles to be "360.3"
     When impacts are calculated
-    Then the amount of "carbon" should be within "0.1" kgs of "11596.9"
+    Then the amount of "carbon" should be within "0.1" of "11596.9"
