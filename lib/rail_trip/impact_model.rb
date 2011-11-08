@@ -2,7 +2,7 @@
 # See LICENSE for details.
 # Contact Brighter Planet for dual-license arrangements.
 
-## Rail trip carbon model
+## Rail trip impact model
 # This model is used by [Brighter Planet](http://brighterplanet.com)'s carbon emission [web service](http://carbon.brighterplanet.com) to estimate the **greenhouse gas emissions of passenger rail travel**.
 #
 ##### Calculations
