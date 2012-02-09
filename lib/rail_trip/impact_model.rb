@@ -45,6 +45,12 @@ module BrighterPlanet
           ### CO2 emission factor calculation
           # Returns the trip's `co2 emission factor` (*kg CO<sub>2</sub>e / passenger-km*).
           committee :co2_emission_factor do
+=begin
+            currently all european countries have same ef for rail traction and rail traction class
+            when this changes may need to split distance by country
+            e.g. make Eurostar from London to Avignon use UK ef in UK and France ef in France
+=end
+            
             #### CO2 emission factor from distance and rail company rail class rail traction
             quorum 'from rail company rail traction rail class', :needs => :rail_company_traction_class,
               # **Complies:** GHG Protocol Scope 3, ISO 14064-1, Climate Registry Protocol
@@ -295,6 +301,10 @@ module BrighterPlanet
                 (characteristics[:duration] / 3600.0) * characteristics[:speed]
             end
             
+=begin
+            FIXME TODO add from rail company
+=end
+            
             #### Distance from country rail class
             quorum 'from country rail class', :needs => [:country_rail_class],
               # **Complies:** GHG Protocol Scope 3, ISO 14064-1, Climate Registry Protocol
@@ -326,6 +336,10 @@ module BrighterPlanet
           ### Speed calculation
           # Returns the trip's average speed (*km / hr*).
           committee :speed do
+=begin
+            FIXME TODO add from rail company
+=end
+            
             #### Speed from country rail class
             quorum 'from country rail class', :needs => [:country_rail_class],
               # **Complies:** GHG Protocol Scope 3, ISO 14064-1, Climate Registry Protocol
