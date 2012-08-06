@@ -1,4 +1,10 @@
 require 'emitter'
+
+require 'rail_trip/impact_model'
+require 'rail_trip/characterization'
+require 'rail_trip/data'
+require 'rail_trip/relationships'
+require 'rail_trip/summarization'
 require 'mapquest_directions'
 
 module BrighterPlanet
