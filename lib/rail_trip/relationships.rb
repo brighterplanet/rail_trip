@@ -1,3 +1,8 @@
+require 'earth/locality/country'
+require 'earth/rail/rail_class'
+require 'earth/rail/rail_company'
+require 'earth/rail/rail_traction'
+
 module BrighterPlanet
   module RailTrip
     module Relationships
