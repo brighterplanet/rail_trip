@@ -121,29 +121,6 @@ Feature: Rail Trip Committee Calculations
       | US      | diesel   | intercity | US diesel intercity    |
       | FR      | electric | highspeed | FR electric highspeed  |
 
-  Scenario Outline: Rail company rail traction committee from rail company and rail traction
-    And a characteristic "rail_company.name" of "<company>"
-    And a characteristic "rail_traction.name" of "<traction>"
-    When the "rail_company_traction" committee reports
-    Then the committee should have used quorum "from rail company and rail traction"
-    And the conclusion of the committee should have "name" of "<company_traction>"
-    Examples:
-      | company | traction | company_traction |
-      | Amtrak  | diesel   | Amtrak diesel    |
-      | SNCF    | electric | SNCF electric    |
-
-  Scenario Outline: Rail company rail traction rail class committee from rail company, rail traction, and rail class
-    And a characteristic "rail_company.name" of "<company>"
-    And a characteristic "rail_traction.name" of "<traction>"
-    And a characteristic "rail_class.name" of "<class>"
-    When the "rail_company_traction_class" committee reports
-    Then the committee should have used quorum "from rail company, rail traction, and rail class"
-    And the conclusion of the committee should have "name" of "<company_traction_class>"
-    Examples:
-      | company | traction | class     | company_traction_class  |
-      | Amtrak  | diesel   | intercity | Amtrak diesel intercity |
-      | SNCF    | electric | highspeed | SNCF electric highspeed |
-
   Scenario: Speed committee from default
     When the "speed" committee reports
     Then the committee should have used quorum "default"
@@ -299,31 +276,6 @@ Feature: Rail Trip Committee Calculations
       | US      | diesel   | intercity | 0.0         |
       | FR      | electric | highspeed | 20.0        |
 
-  Scenario Outline: Electricity intenisty committee from rail company rail traction
-    And a characteristic "rail_company.name" of "<company>"
-    And a characteristic "rail_traction.name" of "<traction>"
-    When the "rail_company_traction" committee reports
-    And the "electricity_intensity" committee reports
-    Then the committee should have used quorum "from rail company rail traction"
-    And the conclusion of the committee should be "<electricity>"
-    Examples:
-      | company | traction | electricity |
-      | Amtrak  | diesel   | 0.0         |
-      | SNCF    | electric | 15.0        |
-
-  Scenario Outline: Electricity intensity committee from rail company rail traction rail class
-    And a characteristic "rail_company.name" of "<company>"
-    And a characteristic "rail_traction.name" of "<traction>"
-    And a characteristic "rail_class.name" of "<class>"
-    When the "rail_company_traction_class" committee reports
-    And the "electricity_intensity" committee reports
-    Then the committee should have used quorum "from rail company rail traction rail class"
-    And the conclusion of the committee should be "<electricity>"
-    Examples:
-      | company | traction | class     | electricity |
-      | Amtrak  | diesel   | intercity | 0.0         |
-      | SNCF    | electric | highspeed | 20.0        |
-
   Scenario: Diesel intensity committee from default
     When the "diesel_intensity" committee reports
     Then the committee should have used quorum "default"
@@ -389,31 +341,6 @@ Feature: Rail Trip Committee Calculations
       | country | traction | class     | diesel |
       | US      | diesel   | intercity | 20.0   |
       | FR      | electric | highspeed | 0.0    |
-
-  Scenario Outline: Diesel intenisty committee from rail company rail traction
-    And a characteristic "rail_company.name" of "<company>"
-    And a characteristic "rail_traction.name" of "<traction>"
-    When the "rail_company_traction" committee reports
-    And the "diesel_intensity" committee reports
-    Then the committee should have used quorum "from rail company rail traction"
-    And the conclusion of the committee should be "<diesel>"
-    Examples:
-      | company | traction | diesel |
-      | Amtrak  | diesel   | 15.0   |
-      | SNCF    | electric | 0.0    |
-
-  Scenario Outline: Diesel intensity committee from rail company rail traction rail class
-    And a characteristic "rail_company.name" of "<company>"
-    And a characteristic "rail_traction.name" of "<traction>"
-    And a characteristic "rail_class.name" of "<class>"
-    When the "rail_company_traction_class" committee reports
-    And the "diesel_intensity" committee reports
-    Then the committee should have used quorum "from rail company rail traction rail class"
-    And the conclusion of the committee should be "<diesel>"
-    Examples:
-      | company | traction | class     | diesel |
-      | Amtrak  | diesel   | intercity | 20.0   |
-      | SNCF    | electric | highspeed | 0.0    |
 
   Scenario: Electricity consumption committee from distance and electricity intensity
     And a characteristic "distance" of "10.0"
@@ -486,31 +413,6 @@ Feature: Rail Trip Committee Calculations
       | country | traction | class     | ef   |
       | US      | diesel   | intercity | 60.0 |
       | FR      | electric | highspeed | 20.0 |
-
-  Scenario Outline: CO2 emission factor from rail company rail traction
-    And a characteristic "rail_company.name" of "<company>"
-    And a characteristic "rail_traction.name" of "<traction>"
-    When the "rail_company_traction" committee reports
-    And the "co2_emission_factor" committee reports
-    Then the committee should have used quorum "from rail company rail traction"
-    And the conclusion of the committee should be "<ef>"
-    Examples:
-      | company | traction | ef   |
-      | Amtrak  | diesel   | 45.0 |
-      | SNCF    | electric | 15.0 |
-
-  Scenario Outline: CO2 emission factor from rail company rail traction rail class
-    And a characteristic "rail_company.name" of "<company>"
-    And a characteristic "rail_traction.name" of "<traction>"
-    And a characteristic "rail_class.name" of "<class>"
-    When the "rail_company_traction_class" committee reports
-    And the "co2_emission_factor" committee reports
-    Then the committee should have used quorum "from rail company rail traction rail class"
-    And the conclusion of the committee should be "<ef>"
-    Examples:
-      | company | traction | class     | ef   |
-      | Amtrak  | diesel   | intercity | 60.0 |
-      | SNCF    | electric | highspeed | 20.0 |
 
   Scenario: Carbon from, co2 emission factor, date, and timeframe
     And a characteristic "date" of "2010-06-01"
