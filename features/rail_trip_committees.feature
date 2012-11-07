@@ -14,13 +14,13 @@ Feature: Rail Trip Committee Calculations
     And the geocoder will encode the origin as "<geocode>" in "country"
     When the "origin_location" committee reports
     Then the committee should have used quorum "from origin"
-    And the conclusion of the committee should have "ll" of "<location>"
+    And the conclusion of the committee should be located at "<location>"
     Examples:
       | origin            | geocode                 | location                |
       | San Francisco, CA | 37.7749295,-122.4194155 | 37.7749295,-122.4194155 |
       | Los Angeles, CA   | 34.0522342,-118.2436849 | 34.0522342,-118.2436849 |
-      | London, UK        | 51.5001524,-0.1262362   | 51.5001524,-0.1262362   |
-      | Sheffield, UK     | 53.3830548,-1.4647953   | 53.3830548,-1.4647953   |
+      | London, UK        | 51.5073346,-0.1276831   | 51.5073346,-0.1276831   |
+      | Sheffield, UK     | 53.3811289,-1.470085    | 53.3811289,-1.470085    |
       | Paris, France     | 48.856614,2.3522219     | 48.856614,2.3522219     |
       | Grenoble, France  | 45.188529,5.724524      | 45.188529,5.724524      |
 
@@ -35,13 +35,13 @@ Feature: Rail Trip Committee Calculations
     And the geocoder will encode the destination as "<geocode>" in "country"
     When the "destination_location" committee reports
     Then the committee should have used quorum "from destination"
-    And the conclusion of the committee should have "ll" of "<location>"
+    And the conclusion of the committee should be located at "<location>"
     Examples:
       | destination       | geocode                 | location                |
       | San Francisco, CA | 37.7749295,-122.4194155 | 37.7749295,-122.4194155 |
       | Los Angeles, CA   | 34.0522342,-118.2436849 | 34.0522342,-118.2436849 |
-      | London, UK        | 51.5001524,-0.1262362   | 51.5001524,-0.1262362   |
-      | Sheffield, UK     | 53.3830548,-1.4647953   | 53.3830548,-1.4647953   |
+      | London, UK        | 51.5073346,-0.1276831   | 51.5073346,-0.1276831   |
+      | Sheffield, UK     | 53.3811289,-1.470085    | 53.3811289,-1.470085    |
       | Paris, France     | 48.856614,2.3522219     | 48.856614,2.3522219     |
       | Grenoble, France  | 45.188529,5.724524      | 45.188529,5.724524      |
 
@@ -194,16 +194,16 @@ Feature: Rail Trip Committee Calculations
     Then the committee should have used quorum "from origin and destination locations"
     And the conclusion of the committee should be "<distance>"
     Examples:
-      | origin       | destination  | mapquest_distance | distance  |
-      | 44.0,-73.15  | 44.0,-73.15  | 0.0               | 0.0       |
-      | 44.0,-73.15  | 44.1,-73.15  | 8.142             | 13.10328  |
+      | origin                  | destination             | mapquest_distance | distance  |
+      | 43.9999812,-73.14873539 | 43.9999812,-73.14873539 | 0.0               | 0.0       |
+      | 43.9999812,-73.14873539 | 44.100614,-73.148702    | 8.27              | 13.30927  |
 
   Scenario: Distance commitee from undriveable origin and destination locations
     And a characteristic "origin" of "Lansing, MI"
     And the geocoder will encode the origin as "Lansing, MI" in "US"
     And a characteristic "destination" of "London, UK"
     And the geocoder will encode the destination as "London, UK" in "UK"
-    And mapquest determines the route to be undriveable
+    And mapquest determines the distance in miles to be ""
     When the "origin_location" committee reports
     And the "destination_location" committee reports
     And the "distance" committee reports

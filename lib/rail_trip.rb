@@ -6,6 +6,7 @@ require 'rail_trip/data'
 require 'rail_trip/relationships'
 require 'rail_trip/summarization'
 require 'mapquest_directions'
+require 'geocoder'
 
 module BrighterPlanet
   module RailTrip

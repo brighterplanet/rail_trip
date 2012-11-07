@@ -49,16 +49,16 @@ Feature: Rail Trip Impacts Calculations
     Then the amount of "carbon" should be within "0.1" of "<emission>"
     Examples:
       | origin      | origin_country | destination | destination_country | distance | emission | comment |
-      | 37.8,-122.4 | US             | 34.1,-118.2 | US                  | 382.2    | 9841.5   | SF to LA |
-      | 48.9,2.4    | FR             | 45.2,5.7    | FR                  | 360.3    | 4638.8   | Paris to Grenoble |
-      | 51.5,-0.1   | UK             | 48.9,2.4    | FR                  | 278.8    | 3769.0   | London to Paris |
+      | 37.8,-122.4 | US             | 34.1,-118.2 | US                  | 381.51   | 9823.7   | SF to LA |
+      | 48.9,2.4    | FR             | 45.2,5.7    | FR                  | 361.624  | 4655.8   | Paris to Grenoble |
+      | 51.5,-0.1   | UK             | 48.9,2.4    | FR                  | 278.786  | 3768.8   | London to Paris |
 
   Scenario: Calculation for rail trip from undriveable locations
     Given it has "origin" of "37.8,-122.4"
     And the geocoder will encode the origin as "37.8,-122.4" in "US"
     And it has "destination" of "48.9,2.4"
     And the geocoder will encode the destination as "48.9,2.4" in "FR"
-    And mapquest determines the route to be undriveable
+    And mapquest determines the distance in miles to be ""
     When impacts are calculated
     Then the amount of "carbon" should be within "0.1" of "405.3"
 
@@ -99,36 +99,15 @@ Feature: Rail Trip Impacts Calculations
       | US      | diesel   | intercity | 9000.0   |
       | FR      | electric | highspeed | 1000.0   |
 
-  Scenario Outline: Calculation for rail trip from company traction
-    Given it has "rail_company.name" of "<company>"
-    And it has "rail_traction.name" of "<traction>"
-    When impacts are calculated
-    Then the amount of "carbon" should be within "0.1" of "<emission>"
-    Examples:
-      | company | traction | emission |
-      | Amtrak  | diesel   | 675.0    |
-      | SNCF    | electric | 750.0    |
-
-  Scenario Outline: Calculation for rail trip from company traction class
-    Given it has "rail_company.name" of "<company>"
-    And it has "rail_traction.name" of "<traction>"
-    And it has "rail_class.name" of "<class>"
-    When impacts are calculated
-    Then the amount of "carbon" should be within "0.1" of "<emission>"
-    Examples:
-      | company | traction | class     | emission |
-      | Amtrak  | diesel   | intercity | 9000.0   |
-      | SNCF    | electric | highspeed | 1000.0   |
-
   Scenario: Calculation for rail trip from locations and rail company
     Given it has "rail_company.name" of "Eurostar"
     And it has "origin" of "London, UK"
     And the geocoder will encode the origin as "origin" in "UK"
     And it has "destination" of "Paris, France"
     And the geocoder will encode the destination as "destination" in "FR"
-    And mapquest determines the distance in miles to be "278.8"
+    And mapquest determines the distance in miles to be "286.0221"
     When impacts are calculated
-    Then the amount of "carbon" should be within "0.1" of "4486.9"
+    Then the amount of "carbon" should be within "0.1" of "4603.1"
 
   Scenario: Calculation for rail trip from locations and country class
     Given it has "country.iso_3166_code" of "US"
@@ -137,9 +116,9 @@ Feature: Rail Trip Impacts Calculations
     And the geocoder will encode the origin as "origin" in "US"
     And it has "destination" of "Los Angeles, CA"
     And the geocoder will encode the destination as "destination" in "US"
-    And mapquest determines the distance in miles to be "382.2"
+    And mapquest determines the distance in miles to be "383.415"
     When impacts are calculated
-    Then the amount of "carbon" should be within "0.1" of "12301.8"
+    Then the amount of "carbon" should be within "0.1" of "12340.9"
 
   Scenario: Calculation for rail trip from locations and company traction class
     Given it has "rail_company.name" of "SNCF"
@@ -149,6 +128,6 @@ Feature: Rail Trip Impacts Calculations
     And the geocoder will encode the origin as "origin" in "FR"
     And it has "destination" of "Grenoble, France"
     And the geocoder will encode the destination as "destination" in "FR"
-    And mapquest determines the distance in miles to be "360.3"
+    And mapquest determines the distance in miles to be "357.713"
     When impacts are calculated
-    Then the amount of "carbon" should be within "0.1" of "11596.9"
+    Then the amount of "carbon" should be within "0.1" of "11513.7"
