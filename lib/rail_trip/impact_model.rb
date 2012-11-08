@@ -247,7 +247,7 @@ module BrighterPlanet
               :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
                 # Uses the [Mapquest directions API](http://developer.mapquest.com/web/products/dev-services/directions-ws) to calculate distance by road between the `origin location` and `destination location` in *km*.
                 mapquest = ::MapQuestDirections.new characteristics[:origin_location].coordinates.join(','), characteristics[:destination_location].coordinates.join(',')
-                mapquest.status.to_i == 0 ? Nokogiri::XML(mapquest.xml).css("distance").first.text.to_f.miles.to(:kilometres) : nil
+                mapquest.status.to_i == 0 ? mapquest.distance_in_miles.miles.to(:kilometres) : nil
             end
             
             #### Distance from duration and speed

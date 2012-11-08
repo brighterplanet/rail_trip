@@ -19,14 +19,14 @@ Feature: Rail Trip Committee Calculations
       | origin            | geocode                 | location                |
       | San Francisco, CA | 37.7749295,-122.4194155 | 37.7749295,-122.4194155 |
       | Los Angeles, CA   | 34.0522342,-118.2436849 | 34.0522342,-118.2436849 |
-      | London, UK        | 51.5073346,-0.1276831   | 51.5073346,-0.1276831   |
-      | Sheffield, UK     | 53.3811289,-1.470085    | 53.3811289,-1.470085    |
-      | Paris, France     | 48.856614,2.3522219     | 48.856614,2.3522219     |
-      | Grenoble, France  | 45.188529,5.724524      | 45.188529,5.724524      |
+      | London, UK        | 51.5073346,  -0.1276831 | 51.5073346,  -0.1276831 |
+      | Sheffield, UK     | 53.381129,   -1.470085  | 53.381129,   -1.470085  |
+      | Paris, France     | 48.856614,    2.3522219 | 48.856614,    2.3522219 |
+      | Grenoble, France  | 45.188529,    5.724524  | 45.188529,    5.724524  |
 
   Scenario: Origin location from non-geocodeable origin
     And a characteristic "origin" of "Bag End, Hobbiton, Westfarthing, The Shire, Eriador, Middle Earth"
-    And the geocoder will fail to encode the origin
+    And the geocoder will encode the origin as "" in ""
     When the "origin_location" committee reports
     Then the conclusion of the committee should be nil
 
@@ -40,14 +40,14 @@ Feature: Rail Trip Committee Calculations
       | destination       | geocode                 | location                |
       | San Francisco, CA | 37.7749295,-122.4194155 | 37.7749295,-122.4194155 |
       | Los Angeles, CA   | 34.0522342,-118.2436849 | 34.0522342,-118.2436849 |
-      | London, UK        | 51.5073346,-0.1276831   | 51.5073346,-0.1276831   |
-      | Sheffield, UK     | 53.3811289,-1.470085    | 53.3811289,-1.470085    |
-      | Paris, France     | 48.856614,2.3522219     | 48.856614,2.3522219     |
-      | Grenoble, France  | 45.188529,5.724524      | 45.188529,5.724524      |
+      | London, UK        | 51.5073346,  -0.1276831 | 51.5073346,  -0.1276831 |
+      | Sheffield, UK     | 53.381129,   -1.470085  | 53.381129,   -1.470085  |
+      | Paris, France     | 48.856614,    2.3522219 | 48.856614,    2.3522219 |
+      | Grenoble, France  | 45.188529,    5.724524  | 45.188529,    5.724524  |
 
   Scenario: Destination location from non-geocodeable destination
     And a characteristic "destination" of "Bag End, Hobbiton, Westfarthing, The Shire, Eriador, Middle Earth"
-    And the geocoder will fail to encode the destination
+    And the geocoder will encode the destination as "" in ""
     When the "destination_location" committee reports
     Then the conclusion of the committee should be nil
 
@@ -194,9 +194,9 @@ Feature: Rail Trip Committee Calculations
     Then the committee should have used quorum "from origin and destination locations"
     And the conclusion of the committee should be "<distance>"
     Examples:
-      | origin                  | destination             | mapquest_distance | distance  |
-      | 43.9999812,-73.14873539 | 43.9999812,-73.14873539 | 0.0               | 0.0       |
-      | 43.9999812,-73.14873539 | 44.100614,-73.148702    | 8.27              | 13.30927  |
+      | origin                 | destination            | mapquest_distance | distance  |
+      | 44.0153291,-73.1673508 | 44.0153291,-73.1673508 |  0                | 0.0       |
+      | 44.0153291,-73.1673508 | 44.4758825,-73.212072  | 34                | 54.717696 |
 
   Scenario: Distance commitee from undriveable origin and destination locations
     And a characteristic "origin" of "Lansing, MI"
