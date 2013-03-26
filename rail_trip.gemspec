@@ -25,9 +25,9 @@ Gem::Specification.new do |s|
   s.rdoc_options = ["--charset=UTF-8"]
   
   s.add_runtime_dependency 'mapquest_directions'
-  s.add_runtime_dependency 'earth', '=>1.1.0'
-  s.add_runtime_dependency 'emitter', '=> 1.1.0'
+  s.add_runtime_dependency 'earth', '>=1.1.0'
+  s.add_runtime_dependency 'emitter', '>= 1.1.0'
   s.add_development_dependency 'rspec-mocks'
-  s.add_development_dependency 'sniff', '=> 1.1.1'
+  s.add_development_dependency 'sniff', '>= 1.1.1'
   s.add_development_dependency 'geocoder'
 end
