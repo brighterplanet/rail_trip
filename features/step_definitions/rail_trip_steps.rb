@@ -21,5 +21,5 @@ Given /^the geocoder will encode the (.*) as "([^\"]*)" in "([^\"]*)"$/ do |loca
 end
 
 Then /^the conclusion of the committee should be located at "(.*)"$/ do |expected_value|
-  compare_values @report.conclusion.coordinates, expected_value.split(',').map(&:to_f)
+  compare_values [@report.conclusion[:latitude], @report.conclusion[:longitude]], expected_value.split(',').map(&:to_f)
 end
