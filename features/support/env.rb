@@ -12,7 +12,7 @@ class GeocoderWrapper
       {
         latitude:  res.coordinates[0],
         longitude: res.coordinates[1],
-        country_iso_3166_code:   res.country_code,
+        country:   res.country_code,
       }
     end
   end

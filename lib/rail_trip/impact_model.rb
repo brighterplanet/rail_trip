@@ -390,7 +390,7 @@ module BrighterPlanet
               :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
                 # Checks whether the `origin location` and `destination location` are in the same [country](http://data.brighterplanet.com/countries) and if so uses it..
                 if characteristics[:origin_location][:country] == characteristics[:destination_location][:country]
-                  Country.find_by_iso_3166_code characteristics[:origin_location][:country_iso_3166_code]
+                  Country.find_by_iso_3166_code characteristics[:origin_location][:country]
                 end
             end
             
