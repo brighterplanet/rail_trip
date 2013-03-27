@@ -246,7 +246,9 @@ module BrighterPlanet
               # **Complies:** GHG Protocol Scope 3, ISO 14064-1, Climate Registry Protocol
               :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
                 # Uses the [Mapquest directions API](http://developer.mapquest.com/web/products/dev-services/directions-ws) to calculate distance by road between the `origin location` and `destination location` in *km*.
-                mapquest = ::MapQuestDirections.new characteristics[:origin_location].values_at(:latitude, :longitude).join(','), characteristics[:destination_location].values_at(:latitude, :longitude).join(',')
+                origin_lat_lng = characteristics[:origin_location].values_at(:latitude, :longitude).join(',')
+                destination_lat_lng = characteristics[:destination_location].values_at(:latitude, :longitude).join(',')
+                mapquest = ::MapQuestDirections.new origin_lat_lng, destination_lat_lng
                 mapquest.status.to_i == 0 ? mapquest.distance_in_miles.miles.to(:kilometres) : nil
             end
             
@@ -388,7 +390,7 @@ module BrighterPlanet
               :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
                 # Checks whether the `origin location` and `destination location` are in the same [country](http://data.brighterplanet.com/countries) and if so uses it..
                 if characteristics[:origin_location][:country] == characteristics[:destination_location][:country]
-                  Country.find_by_iso_3166_code characteristics[:origin_location][:country]
+                  Country.find_by_iso_3166_code characteristics[:origin_location][:country_iso_3166_code]
                 end
             end
             
