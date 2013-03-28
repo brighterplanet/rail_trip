@@ -8,6 +8,8 @@ module BrighterPlanet
     module Relationships
       def self.included(target)
         target.belongs_to :country, :foreign_key => 'country_iso_3166_code'
+        target.belongs_to :origin_country, :foreign_key => 'origin_country_iso_3166_code'
+        target.belongs_to :destination_country, :foreign_key => 'destination_country_iso_3166_code'
         target.belongs_to :rail_company, :foreign_key => 'rail_company_name'
         target.belongs_to :rail_class, :foreign_key => 'rail_class_name'
         target.belongs_to :rail_traction, :foreign_key => 'rail_traction_name'

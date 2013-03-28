@@ -24,6 +24,8 @@ module BrighterPlanet
         base.characterize do
           has :date
           has :country
+          has :origin_country
+          has :destination_country
           has :origin
           has :destination
           has :rail_company  # e.g. Amtrak
