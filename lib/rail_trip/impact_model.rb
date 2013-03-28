@@ -375,45 +375,15 @@ module BrighterPlanet
           
           ### Rail traction calculation
           # Returns the client-input [rail traction](http://data.brighterplanet.com/tractions).
-          
-          ### Country calculation
-          # Returns the `country` in which the trip occurred.
-          committee :country do
-            #### Country from client input
-            # **Complies:** All
-            #
-            # Uses the client-input [country](http://data.brighterplanet.com/countries).
-            
-            #### Country from origin and destination locations
-            quorum 'from origin and destination locations', :needs => [:origin_location, :destination_location],
-              # **Complies:** GHG Protocol Scope 3, ISO 14064-1, Climate Registry Protocol
-              :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
-                # Checks whether the `origin location` and `destination location` are in the same [country](http://data.brighterplanet.com/countries) and if so uses it..
-                if characteristics[:origin_location][:country] == characteristics[:destination_location][:country]
-                  Country.find_by_iso_3166_code characteristics[:origin_location][:country]
-                end
-            end
-            
-            #### Country from rail company
-            quorum 'from rail company', :needs => :rail_company,
-              # **Complies:** GHG Protocol Scope 3, ISO 14064-1, Climate Registry Protocol
-              :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
-                # Looks up the [country](http://data.brighterplanet.com/countries) in which the `rail company` operates.
-                characteristics[:rail_company].country
-            end
-          end
-          
-          ### Rail company calculation
-          # Returns the client-input [rail company](http://data.brighterplanet.com/rail_companies).
-          
+                    
           ### Destination location calculation
           # Returns the `destination location` (*lat / lng*).
           committee :destination_location do
             #### Destination location from destination
-            quorum 'from destination', :needs => :destination,
+            quorum 'from destination', :needs => [:destination, :country],
               # **Complies:** GHG Protocol Scope 3, ISO 14064-1, Climate Registry Protocol
               :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
-                RailTrip.geocoder.geocode characteristics[:destination]
+                RailTrip.geocoder.geocode characteristics[:destination], characteristics[:country].iso_3166_code
             end
           end
           
@@ -424,15 +394,35 @@ module BrighterPlanet
           # Returns the `origin location` (*lat / lng*).
           committee :origin_location do
             #### Origin location from origin
-            quorum 'from origin', :needs => :origin,
+            quorum 'from origin', :needs => [:origin, :country],
               # **Complies:** GHG Protocol Scope 3, ISO 14064-1, Climate Registry Protocol
               :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
-                RailTrip.geocoder.geocode characteristics[:origin]
+                RailTrip.geocoder.geocode characteristics[:origin], characteristics[:country].iso_3166_code
             end
           end
           
           ### Origin calculation
           # Returns the client-input `origin`.
+
+          ### Country calculation
+          # Returns the `country` in which the trip occurred.
+          committee :country do
+            #### Country from client input
+            # **Complies:** All
+            #
+            # Uses the client-input [country](http://data.brighterplanet.com/countries).
+            
+            #### Country from rail company
+            quorum 'from rail company', :needs => :rail_company,
+              # **Complies:** GHG Protocol Scope 3, ISO 14064-1, Climate Registry Protocol
+              :complies => [:ghg_protocol_scope_3, :iso, :tcr] do |characteristics|
+                # Looks up the [country](http://data.brighterplanet.com/countries) in which the `rail company` operates.
+                characteristics[:rail_company].country
+            end
+          end
+
+          ### Rail company calculation
+          # Returns the client-input [rail company](http://data.brighterplanet.com/rail_companies).
           
           ### Date calculation
           # Returns the `date` on which the trip occurred.
